@@ -63,6 +63,8 @@ docker compose up -d
 
 echo "Aplicando as migrations do Laravel..."
 docker compose exec -T app php artisan migrate --force
+echo "Criando somente o cenário sintético idempotente do laboratório..."
+docker compose exec -T app php artisan db:seed --force
 
 echo "Aguardando o health check HTTP do Laravel..."
 port_mapping="$(docker compose port app 80)"

@@ -11,7 +11,7 @@ echo "Verificando a configuração do Docker Compose..."
 docker compose config --quiet
 
 echo "Verificando a sintaxe dos scripts shell..."
-bash -n scripts/bootstrap.sh scripts/verify.sh
+bash -n scripts/bootstrap.sh scripts/verify.sh scripts/prepare-test-db.sh
 sh -n scripts/docker-entrypoint.sh
 
 running_services="$(docker compose ps --status running --services)"
@@ -47,7 +47,15 @@ foreach (["filament/filament" => 5, "livewire/livewire" => 4] as $package => $ma
 }'
 
 echo "Verificando se as migrations foram aplicadas..."
-docker compose exec -T app php artisan migrate:status --no-interaction
+migration_status="$(docker compose exec -T app php artisan migrate:status --no-interaction)"
+printf '%s\n' "$migration_status"
+if grep -Fq 'Pending' <<<"$migration_status"; then
+    echo "Há migrations pendentes no banco de desenvolvimento." >&2
+    exit 1
+fi
+
+echo "Preparando o banco MySQL isolado para testes..."
+./scripts/prepare-test-db.sh
 
 echo "Executando a suíte de testes do Laravel..."
 docker compose exec -T app php artisan test
@@ -57,8 +65,9 @@ port_mapping="$(docker compose port app 80)"
 app_port="${port_mapping##*:}"
 curl --fail --silent --show-error "http://127.0.0.1:${app_port}/up" >/dev/null
 echo "Health check HTTP passou."
-curl --fail --silent --show-error --location "http://127.0.0.1:${app_port}/admin" >/dev/null
-echo "Smoke test HTTP do painel Filament passou."
+admin_status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' "http://127.0.0.1:${app_port}/admin")"
+[[ "$admin_status" == 200 ]] || { echo "Esperado /admin sem login com HTTP 200; recebido ${admin_status}." >&2; exit 1; }
+echo "Smoke test HTTP do painel Filament sem login passou."
 
 echo "Verificando erros de whitespace no diff..."
 git diff --check
