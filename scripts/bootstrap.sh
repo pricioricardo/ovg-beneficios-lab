@@ -4,27 +4,27 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-# Cloud workspaces can mount the home directory read-only; keep BuildKit state writable.
+# Workspaces Cloud podem montar o diretório pessoal como somente leitura; mantenha gravável o estado do BuildKit.
 export BUILDX_CONFIG="${BUILDX_CONFIG:-${TMPDIR:-/tmp}/ovg-beneficios-lab-buildx}"
 
 command -v docker >/dev/null 2>&1 || {
-    echo "Docker is required. Install Docker Desktop or Docker Engine with Compose v2." >&2
+    echo "Docker é necessário. Instale Docker Desktop ou Docker Engine com Compose v2." >&2
     exit 1
 }
 docker compose version >/dev/null
 command -v curl >/dev/null 2>&1 || {
-    echo "curl is required for the readiness check." >&2
+    echo "curl é necessário para verificar a disponibilidade da aplicação." >&2
     exit 1
 }
 
 if [[ ! -f .env ]]; then
     cp .env.example .env
-    echo "Created local .env from .env.example. Review local-only values before sharing the machine."
+    echo "Arquivo .env local criado a partir de .env.example. Revise os valores locais antes de compartilhar a máquina."
 else
-    echo "Keeping existing .env."
+    echo "O .env existente será mantido."
 fi
 
-# Persist the workspace UID for direct `docker compose up -d` use after bootstrap.
+# Persista o UID do workspace para permitir `docker compose up -d` diretamente após o bootstrap.
 if ! grep -q '^APP_UID=' .env; then
     printf '\nAPP_UID=%s\n' "$(id -u)" >> .env
 fi
@@ -44,10 +44,10 @@ else
 fi
 trap 'rm -f .composer-ca-certificates.crt' EXIT
 
-echo "Building the PHP application image..."
+echo "Construindo a imagem PHP da aplicação..."
 docker compose build app
 
-echo "Installing locked Composer dependencies..."
+echo "Instalando as dependências Composer fixadas no lockfile..."
 if [[ -s .composer-ca-certificates.crt ]]; then
     docker compose run --rm --no-deps \
         -e COMPOSER_CAFILE=/var/www/html/.composer-ca-certificates.crt \
@@ -58,23 +58,23 @@ else
         app composer install --no-interaction --prefer-dist --no-progress
 fi
 
-echo "Starting Laravel and MySQL..."
+echo "Iniciando Laravel e MySQL..."
 docker compose up -d
 
-echo "Applying Laravel migrations..."
+echo "Aplicando as migrations do Laravel..."
 docker compose exec -T app php artisan migrate --force
 
-echo "Waiting for Laravel health endpoint..."
+echo "Aguardando o health check HTTP do Laravel..."
 port_mapping="$(docker compose port app 80)"
 app_port="${port_mapping##*:}"
 for attempt in {1..30}; do
     if curl --fail --silent "http://127.0.0.1:${app_port}/up" >/dev/null; then
-        echo "Laravel is ready at http://127.0.0.1:${app_port}"
+        echo "Laravel está disponível em http://127.0.0.1:${app_port}"
         exit 0
     fi
     sleep 2
 done
 
 docker compose logs --tail=80 app mysql >&2
-echo "Laravel did not become ready in time." >&2
+echo "Laravel não ficou disponível dentro do prazo." >&2
 exit 1

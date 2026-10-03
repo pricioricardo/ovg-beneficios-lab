@@ -1,9 +1,9 @@
-# Architecture policy
+# Policy de arquitetura
 
-- Keep this pilot as one Laravel application with Filament and MySQL.
-- Keep the eventual application at 10 screens or fewer.
-- Do not add Redis, queues, Kubernetes, microservices, or unrelated infrastructure without an explicit, documented requirement.
-- Put business behavior in application/domain code and keep Filament focused on presentation and interaction.
-- Document material architecture choices in `docs/ARCHITECTURE.md` before or with the change.
-- Keep shared instructions provider-neutral; provider folders may contain integrations only.
-- Treat consolidated migrations as immutable and use additive migrations for later schema changes.
+- Mantenha este piloto como uma aplicação Laravel com Filament e MySQL.
+- Mantenha a aplicação futura em 10 telas ou menos.
+- Não adicione Redis, filas, Kubernetes, microsserviços ou infraestrutura sem relação com o projeto sem um requisito explícito e documentado.
+- Coloque o comportamento de negócio no código de aplicação/domínio e mantenha Filament focado em apresentação e interação.
+- Documente decisões arquiteturais materiais em `docs/ARCHITECTURE.md` antes da mudança ou junto dela.
+- Mantenha as instruções compartilhadas independentes de provedor; pastas específicas de provedores podem conter somente integrações.
+- Trate migrations consolidadas como imutáveis e use migrations aditivas para mudanças posteriores de schema.

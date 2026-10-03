@@ -1,12 +1,15 @@
-# Project state
+# Estado do projeto
 
-- **Current gate:** GATE 1 — PASS. Runtime certification passed; Gate 2 has not started.
-- **Branch:** `chore/gate-001-runtime-certification`, based on `origin/work` at Gate 0 commit `a447700302dab51652db3853dae86792cb316f44`.
-- **Certified baseline:** PHP 8.4.26, Laravel 13.34.0, Filament 5.9.0, Livewire 4.4.7, MySQL 8.4.11, Composer 2.8.12, Docker Compose v2.40.3. Exact PHP package versions are locked in `composer.lock`.
-- **Bootstrap:** `./scripts/bootstrap.sh` passed after a clean PHP image build; locked Composer dependencies installed; both services started; migrations applied; `/up` returned successfully. A later idempotent run reported no migrations pending.
-- **Verify:** `./scripts/verify.sh` passed: Compose config, Composer strict validation, shell syntax, MySQL health and version, framework/package versions, migration status, 2 tests / 3 assertions including a Laravel-to-MySQL query, `/up`, `/admin`, and `git diff --check`.
-- **Runtime details:** Compose runs only the Laravel/Apache app and MySQL 8.4. The empty Filament panel is registered at `/admin`; its generated scaffolding contains no domain resources. MySQL data persists in a named Docker volume.
-- **Domain scope:** No beneficiaries, benefits, eligibility requirements, evaluations, business rules, business dashboards, or real data were added. No sensitive credentials were committed.
-- **Engineering notes:** Tinker 3.0 is required for Illuminate 13. The MySQL healthcheck now uses the `mysqladmin` client included in the official image. The app image matches the workspace UID so Apache can read a restrictive Cloud bind mount without broadening file permissions. An intermediate BuildKit cache exhaustion was resolved by pruning only unused build cache; the final bootstrap and verification passed.
-- **Blockers:** None known. Composer dependency resolution and installation completed over TLS.
-- **Next:** Stop at Gate 1. A future gate may begin only from a separate explicit task; do not infer approval for domain implementation.
+- **Gate atual:** GATE 1.1 — PASS. O Gate 0 está CONSOLIDADO e o Gate 1 está PASS. O Gate 2 continua planejado e não foi iniciado.
+- **Integração Git:** o Gate 1 foi certificado em `chore/gate-001-runtime-certification`, commit `fef41c4cb2c5d7f97129647dbae0a76e24bd163c`, e integrado a `work` pelo merge commit `f5b03e2ea64a925c9609e717a4cc72d6cf467946`.
+- **Branch deste gate:** `chore/gate-001b-harness-ptbr`, criado a partir de `work` em `f5b03e2ea64a925c9609e717a4cc72d6cf467946`.
+- **Baseline certificada, sem alteração neste gate:** PHP 8.4.26, Laravel 13.34.0, Filament 5.9.0, Livewire 4.4.7, MySQL 8.4.11, Composer 2.8.12 e Docker Compose v2.40.3. As versões exatas dos pacotes PHP permanecem em `composer.lock`.
+- **Runtime certificado:** `./scripts/bootstrap.sh` e `./scripts/verify.sh` passaram no Gate 1. Laravel conecta ao MySQL, as migrations padrão estão aplicadas e `/up` e `/admin` respondem. O painel Filament mantém a autenticação padrão e `/admin` redireciona para login.
+- **Escopo de domínio:** nenhuma entidade de Beneficiário, Benefício, Requisito, Regra de Elegibilidade, Avaliação ou Resultado de Avaliação foi criada. Não há dashboards de negócio nem dados reais.
+- **Exceção de continuidade Cloud:** duas novas tarefas Codex Cloud foram iniciadas para validar retomada a partir de `origin/work`; ambas falharam antes de qualquer alteração por indisponibilidade do proxy interno na porta 8080. No workspace atual, `github.com`, `api.github.com` e `git ls-remote origin refs/heads/work` responderam, este último com `f5b03e2ea64a925c9609e717a4cc72d6cf467946`. Por isso, este Gate 1.1 é executado excepcionalmente neste workspace. A exceção não invalida o Git nem o harness persistido. A retomada em novo workspace deverá ser revalidada em gate posterior após a normalização da conectividade Cloud. Nenhuma configuração de proxy ou da infraestrutura Cloud foi alterada.
+- **Blockers deste workspace:** nenhum conhecido para a execução documental. A indisponibilidade relatada permanece uma ressalva para tarefas em novos workspaces Cloud.
+- **Resultado do Gate 1.1:** o harness e a documentação foram padronizados em pt-BR; `docs/ROADMAP.md` é a visão canônica dos gates. A revisão confirmou equivalência semântica, comandos e identificadores preservados, e ausência de alterações ao runtime ou à baseline.
+- **Verificação deste gate:** `./scripts/verify.sh` passou integralmente: Compose, sintaxe shell, Composer, MySQL saudável, versões de PHP/Laravel/Filament/Livewire, migrations, 2 testes com 3 assertions, `/up`, `/admin` e `git diff --check`.
+- **Blockers:** nenhum conhecido para o Gate 1.1 neste workspace. Permanece a ressalva de continuidade em novos workspaces Codex Cloud, descrita acima e a ser revalidada em gate posterior.
+- **Próximo passo:** GATE 2 — Contrato de Domínio — PLANEJADO. Não está autorizado nem iniciado por este registro.
+- **Histórico editorial:** o conteúdo deste estado foi traduzido durante o Gate 1.1. Identificadores, versões, SHAs e resultados históricos foram preservados.

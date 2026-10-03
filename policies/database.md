@@ -1,8 +1,8 @@
-# Database policy
+# Policy de banco de dados
 
-- MySQL is the development database and must be started through Docker Compose.
-- Use synthetic data only. Never import, copy, log, or persist real beneficiary information.
-- Keep schema changes in Laravel migrations and review them with the relevant tests.
-- Once a migration has been consolidated, do not edit it; add a new migration for subsequent changes.
-- Keep credentials and local connection overrides in ignored environment files. Never commit secrets.
-- Do not add schema or seed data for beneficiaries, benefits, requirements, or eligibility evaluations during the bootstrap stage.
+- MySQL é o banco de desenvolvimento e deve ser iniciado pelo Docker Compose.
+- Use somente dados sintéticos. Nunca importe, copie, registre em logs ou persista informações reais de beneficiários.
+- Mantenha mudanças de schema em Laravel migrations e revise-as com os testes pertinentes.
+- Depois que uma migration for consolidada, não a edite; adicione uma nova migration para mudanças subsequentes.
+- Mantenha credenciais e configurações locais de conexão em arquivos de ambiente ignorados pelo Git. Nunca faça commit de secrets.
+- Não adicione schema ou dados de seed para beneficiários, benefícios, requisitos ou avaliações de elegibilidade durante a etapa de bootstrap.

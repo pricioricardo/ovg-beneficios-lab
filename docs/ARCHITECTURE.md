@@ -1,30 +1,30 @@
-# Architecture and decisions
+# Arquitetura e decisões
 
-## Initial shape
+## Estrutura inicial
 
-Use one Laravel application with Filament as the admin UI framework and MySQL as its relational database. Docker Compose runs only the PHP/Apache application and MySQL. Keep the pilot small and avoid external services until a concrete requirement justifies them.
+Use uma aplicação Laravel com Filament como framework da interface administrativa e MySQL como banco de dados relacional. O Docker Compose executa somente a aplicação PHP/Apache e o MySQL. Mantenha o piloto pequeno e evite serviços externos até que um requisito concreto os justifique.
 
-## Decision record
+## Registro de decisões
 
-### ADR-001: Laravel 13 application with Filament 5 and Livewire 4, backed by MySQL 8.4
+### ADR-001: Aplicação Laravel 13 com Filament 5 e Livewire 4, usando MySQL 8.4
 
-- **Status:** Accepted for the experiment.
-- **Context:** The team is evaluating agent-assisted development with a small, reviewable application.
-- **Decision:** The Gate 1 target baseline is PHP 8.4, Laravel 13, Filament 5, Livewire 4, MySQL 8.4 LTS, Composer 2, and Docker Compose. The exact resolved Composer patch versions live in `composer.lock`.
-- **Consequences:** Keep business logic in Laravel and UI concerns in Filament. Do not add Redis, queue workers, microservices, or orchestration platforms for this pilot. Keep the eventual interface within 10 screens. Gate 1 runtime certification results are recorded in `.agent/STATE.md`.
+- **Status:** Aceito para o experimento.
+- **Contexto:** A equipe está avaliando desenvolvimento assistido por agentes em uma aplicação pequena e fácil de revisar.
+- **Decisão:** A baseline do Gate 1 é PHP 8.4, Laravel 13, Filament 5, Livewire 4, MySQL 8.4 LTS, Composer 2 e Docker Compose. As versões exatas resolvidas dos pacotes Composer estão em `composer.lock`.
+- **Consequências:** Mantenha a lógica de negócio em Laravel e as responsabilidades de interface em Filament. Não adicione Redis, workers de fila, microsserviços ou plataformas de orquestração a este piloto. Limite a interface futura a 10 telas. Os resultados da certificação de runtime do Gate 1 estão registrados em `.agent/STATE.md`.
 
-### ADR-002: Provider-neutral project instructions
+### ADR-002: Instruções de projeto independentes de provedor
 
-- **Status:** Accepted.
-- **Context:** The repository must work with Codex and Claude Code, in cloud and local VS Code environments.
-- **Decision:** Keep shared behavior in `AGENTS.md`, `policies/`, `skills/`, `scripts/`, and `docs/`; keep `CLAUDE.md` and any future provider folders as thin adapters.
-- **Consequences:** Essential policy and verification cannot depend on a single AI vendor.
+- **Status:** Aceito.
+- **Contexto:** O repositório deve funcionar com Codex e Claude Code, tanto na nuvem quanto em VS Code local.
+- **Decisão:** Mantenha o comportamento compartilhado em `AGENTS.md`, `policies/`, `skills/`, `scripts/` e `docs/`; mantenha `CLAUDE.md` e futuras pastas de provedores como adaptadores finos.
+- **Consequências:** Políticas e verificações essenciais não podem depender de um único fornecedor de IA.
 
-### ADR-003: Compose for the development runtime
+### ADR-003: Compose para o runtime de desenvolvimento
 
-- **Status:** Accepted.
-- **Context:** Developers need a repeatable `docker compose up -d` workflow with Laravel and MySQL.
-- **Decision:** Define only `app` and `mysql` services, with a named volume for MySQL data and a health check for startup ordering.
-- **Consequences:** Application dependencies are locked by Composer. Local `.env` and secrets stay outside Git. Verification uses a deterministic script.
+- **Status:** Aceito.
+- **Contexto:** Desenvolvedores precisam de um fluxo repetível com `docker compose up -d` e paridade entre ambiente local e Cloud.
+- **Decisão:** Defina somente os serviços `app` e `mysql`, com um volume nomeado para os dados MySQL e um health check para ordenar a inicialização.
+- **Consequências:** As dependências da aplicação são fixadas pelo Composer. O `.env` local e secrets ficam fora do Git. A verificação usa um script determinístico.
 
-Record future material decisions here with status, context, decision, and consequences. Do not rewrite a consolidated migration to express a later schema change; add a new migration.
+Registre futuras decisões materiais com status, contexto, decisão e consequências. Não reescreva uma migration consolidada para expressar uma mudança posterior de schema; adicione uma nova migration.

@@ -1,3 +1,3 @@
-# Claude Code adapter
+# Adaptador para Claude Code
 
-Read and follow [`AGENTS.md`](AGENTS.md) as the portable project instructions. Apply the relevant shared rules in [`policies/`](policies/) and use [`scripts/verify.sh`](scripts/verify.sh) for repository verification. Keep Claude-specific integrations in `.claude/`; do not duplicate shared policies here.
+Leia e siga [`AGENTS.md`](AGENTS.md) como instrução portátil do projeto. Aplique as regras compartilhadas pertinentes em [`policies/`](policies/) e use [`scripts/verify.sh`](scripts/verify.sh) para verificar o repositório. Mantenha integrações específicas do Claude em `.claude/`; não duplique aqui as políticas compartilhadas.
