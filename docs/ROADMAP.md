@@ -24,13 +24,13 @@ Padronização das instruções e documentação em português do Brasil, inclus
 
 ## GATE 2 — Contrato de Domínio
 
-**Status:** PLANEJADO — NÃO AUTORIZADO
+**Status:** PASS / FROZEN
 
-Antes de qualquer migration ou implementação, modelar Beneficiário, Benefício, Requisito, Regra de Elegibilidade, Avaliação e Resultado de Avaliação. O contrato deverá definir responsabilidades, relacionamentos, invariantes, estados, versionamento de regras, explicabilidade, critérios de aceite e limites do MVP. Nenhuma implementação poderá ocorrer antes da aprovação desse contrato.
+O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A revisão independente final aprovou o freeze; o contrato está congelado. Nenhuma implementação de domínio ocorreu. O Gate 3 é o próximo gate planejado e não foi iniciado nesta tarefa.
 
 ## GATE 3 — Primeira Implementação Funcional
 
-**Status:** PLANEJADO — NÃO AUTORIZADO
+**Status:** PLANEJADO — NÃO INICIADO
 
 Implementar o menor fluxo útil aprovado no Gate 2. O escopo dependerá da aprovação daquele contrato.
 
@@ -48,6 +48,8 @@ As etapas abaixo são intenções futuras e não estão autorizadas por este gat
 - benchmark Scriptcase x Laravel/Filament;
 - ambiente local com VS Code + Docker;
 - preparação da demonstração e apresentação executiva.
+
+A futura demonstração apresentará **análise de elegibilidade**, com os rótulos “ELEGÍVEL”, “INELEGÍVEL”, “PENDENTE DE DOCUMENTAÇÃO” e “REQUER ANÁLISE HUMANA”. Não tratará esses resultados como aprovação ou reprovação administrativa; Decisão Final humana fica fora do MVP.
 
 ## Intenção futura: Model Routing / Capability-Cost Routing
 
