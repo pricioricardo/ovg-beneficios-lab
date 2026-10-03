@@ -30,9 +30,9 @@ O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benef�
 
 ## GATE 3 — Primeira Implementação Funcional
 
-**Status:** PLANEJADO — NÃO INICIADO
+**Status:** READY FOR REVIEW
 
-Implementar o menor fluxo útil aprovado no Gate 2. O escopo dependerá da aprovação daquele contrato.
+O primeiro fluxo vertical de Cadeira de Rodas está implementado conforme o contrato congelado no Gate 2: cadastro e comprovação sintéticos, regra v1 publicada, engine declarativa, avaliação transacional, snapshot, resultados por nó e explicação no Filament. `migrate:fresh --seed` e `scripts/verify.sh` passaram; a revisão independente ainda decidirá o PASS. Consulte `docs/implementation/GATE_003.md`.
 
 ## Etapas futuras — não autorizadas
 
@@ -68,7 +68,6 @@ Esta intenção não autoriza criar `models.yaml`, router, SDKs ou lógica de ro
 
 ## Observações do runtime certificado
 
-- O painel Filament atual usa autenticação padrão; `/admin` redireciona à página de login.
-- A intenção para o MVP futuro é acesso direto ao painel sem autenticação, salvo decisão posterior em contrário. A autenticação não será alterada no Gate 1.1.
+- No Gate 1, o painel Filament usava autenticação padrão e `/admin` redirecionava ao login. No Gate 3, `/admin` abre diretamente o painel exclusivamente sintético do laboratório, conforme ADR-007.
 - As imagens Docker usam linhas de versão como `php:8.4` e `mysql:8.4`, sem necessariamente fixar patch ou digest imutável. Antes do benchmark final, avaliar se versões ou image digests serão congelados para aumentar a reprodutibilidade.
 - Duas novas tarefas Codex Cloud falharam antes de qualquer alteração por indisponibilidade do proxy interno na porta 8080. O Gate 1.1 ocorre excepcionalmente no workspace atual, cuja conectividade GitHub foi validada. Essa exceção não invalida o Git nem o harness persistido; a retomada em um novo workspace deverá ser revalidada em gate futuro após a normalização da conectividade Cloud.

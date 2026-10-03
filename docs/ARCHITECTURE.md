@@ -48,4 +48,18 @@ Use uma aplicação Laravel com Filament como framework da interface administrat
 - **Decisão:** O servidor captura uma vez o instante corrente em UTC no início da Avaliação, sem escolha retroativa ou futura pelo usuário. Cálculos de calendário usam `America/Sao_Paulo`; o mesmo instante seleciona regra, parâmetros e validade documental. Manter referências relacionais às entidades e versões, um snapshot JSON controlado e versionado das entradas/derivações e Resultados de Avaliação relacionais para cada nó da árvore. Valores monetários decisórios são exatos em centavos, sem `float` ou arredondamento de exibição.
 - **Consequências:** Avaliações concluídas ficam imutáveis e explicáveis sem consultar o estado atual do Beneficiário. Snapshot, resultados por nó e conclusão precisam ser persistidos consistentemente. O JSON não substitui identidade e integridade relacionais. A implementação deverá versionar e validar seu schema.
 
+### ADR-007: Painel de laboratório sem login no Gate 3
+
+- **Status:** Implementado no Gate 3, aguardando revisão.
+- **Contexto:** O primeiro fluxo usa somente dados sintéticos e precisa de acesso direto ao painel para demonstração.
+- **Decisão:** Remover login e middleware de autenticação padrão do painel Filament. `/admin` responde diretamente. Não introduzir autenticação alternativa neste slice.
+- **Consequências:** Este modo é exclusivo do laboratório e não é padrão para um sistema produtivo. O ambiente deve conter somente dados fictícios; testes e `scripts/verify.sh` exigem acesso direto ao painel.
+
+### ADR-008: Testes de domínio em MySQL isolado
+
+- **Status:** Implementado no Gate 3, aguardando revisão.
+- **Contexto:** SQLite ocultaria diferenças de FK composta, `CHECK`, JSON e transações usadas pelo slice.
+- **Decisão:** Usar `ovg_beneficios_lab_test` como banco descartável, preparado por `scripts/prepare-test-db.sh`, e forçar MySQL no `phpunit.xml`. `migrate:fresh --seed` é executado somente nesse banco.
+- **Consequências:** A suíte requer MySQL local saudável. Os testes não apagam o banco padrão de desenvolvimento.
+
 Registre futuras decisões materiais com status, contexto, decisão e consequências. Não reescreva uma migration consolidada para expressar uma mudança posterior de schema; adicione uma nova migration.

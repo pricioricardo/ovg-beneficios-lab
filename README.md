@@ -10,13 +10,15 @@ Requisitos: Docker Desktop ou Docker Engine com Docker Compose v2, Git e `curl`.
 ./scripts/bootstrap.sh
 ```
 
-O script cria `.env` local se necessário, constrói a imagem PHP, instala as dependências Composer fixadas em `composer.lock`, inicia Laravel e MySQL, aplica as migrations e aguarda o health check da aplicação. Para iniciar diretamente depois da primeira configuração:
+O script cria `.env` local se necessário, constrói a imagem PHP, instala as dependências Composer fixadas em `composer.lock`, inicia Laravel e MySQL, aplica as migrations, cria os dados sintéticos idempotentes do Gate 3 e aguarda o health check da aplicação. Para iniciar diretamente depois da primeira configuração:
 
 ```sh
 docker compose up -d
 ```
 
 Laravel fica em `http://localhost:8080`; MySQL fica na porta `3306`. As portas e credenciais locais podem ser ajustadas em `.env`. Os valores padrão são placeholders públicos exclusivos para desenvolvimento com dados sintéticos. Não os reutilize fora desse ambiente.
+
+O painel do laboratório abre em `/admin` sem login e permite cadastrar Beneficiários sintéticos, registrar o estado do Relatório Profissional e avaliar o benefício fictício Cadeira de Rodas. Essa decisão de acesso vale somente para o laboratório.
 
 Para parar os serviços: `docker compose down`. Para também remover os dados locais do MySQL: `docker compose down --volumes`.
 
@@ -26,10 +28,10 @@ Para parar os serviços: `docker compose down`. Para também remover os dados lo
 ./scripts/verify.sh
 ```
 
-Este é o ponto único de entrada para validação. Ele confere a configuração do Compose, a sintaxe dos scripts, o manifesto Composer, os containers e o health check do MySQL, as versões do runtime, o estado das migrations, a suíte de testes e as rotas `/up` e `/admin`.
+Este é o ponto único de entrada para validação. Ele confere a configuração do Compose, a sintaxe dos scripts, o manifesto Composer, os containers e o health check do MySQL, as versões do runtime, o estado das migrations, a suíte de testes em um banco MySQL isolado e as rotas `/up` e `/admin`.
 
 ## Instruções e escopo
 
 Leia [`AGENTS.md`](AGENTS.md), [`policies/`](policies/), [`docs/PROJECT.md`](docs/PROJECT.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) e [`docs/ROADMAP.md`](docs/ROADMAP.md). `AGENTS.md` é a fonte portátil principal; `CLAUDE.md` é somente um adaptador fino para Claude Code.
 
-O runtime foi certificado no Gate 1. O Gate 1.1 consolida o harness e a documentação em pt-BR. Beneficiários, benefícios, requisitos, avaliações, regras de elegibilidade e telas de negócio continuam fora do escopo até que os gates futuros autorizem esse trabalho.
+O runtime foi certificado no Gate 1. O Gate 1.1 consolidou o harness em pt-BR. O Gate 2 congelou o contrato de domínio. O Gate 3 implementa somente o fluxo de Cadeira de Rodas e aguarda revisão independente; consulte [a descrição do slice](docs/implementation/GATE_003.md).
