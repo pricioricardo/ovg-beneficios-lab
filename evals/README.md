@@ -1,5 +1,7 @@
-# Evaluation harness
+# Harness de Evals
 
-This directory is reserved for future synthetic evaluation cases that compare agent-assisted development workflows. No business-domain evaluation cases are defined during engineering bootstrap.
+Este diretório está reservado a futuros casos de avaliação sintética que comparem fluxos de desenvolvimento assistido por agentes. Não há casos de avaliação de domínio definidos durante o bootstrap de engenharia.
 
-When adding cases, use fictional fixtures, state the task and acceptance criteria clearly, define reproducible scoring and expected checks, and avoid secrets or real beneficiary information. Keep the evaluation method independent of any single AI provider.
+Ao adicionar casos, use fixtures fictícias, descreva claramente a tarefa e os critérios de aceite, defina pontuação e verificações reproduzíveis e não inclua secrets nem informações reais de beneficiários. Mantenha o método de avaliação independente de um único provedor de IA.
+
+A suíte futura poderá avaliar operações CRUD, mudanças no banco de dados, regras de negócio, regressão, segurança e manutenção. Esses casos não fazem parte deste gate.

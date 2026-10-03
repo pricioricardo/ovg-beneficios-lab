@@ -10,15 +10,15 @@ Requisitos: Docker Desktop ou Docker Engine com Docker Compose v2, Git e `curl`.
 ./scripts/bootstrap.sh
 ```
 
-O script cria `.env` local se necessário, constrói a imagem e inicia Laravel + MySQL. Para iniciar diretamente depois da primeira configuração:
+O script cria `.env` local se necessário, constrói a imagem PHP, instala as dependências Composer fixadas em `composer.lock`, inicia Laravel e MySQL, aplica as migrations e aguarda o health check da aplicação. Para iniciar diretamente depois da primeira configuração:
 
 ```sh
 docker compose up -d
 ```
 
-Laravel fica em `http://localhost:8080`; MySQL fica na porta `3306`. As portas e credenciais locais podem ser ajustadas em `.env`. Os valores padrão são apenas placeholders públicos para desenvolvimento com dados sintéticos. Não os reutilize fora do ambiente local.
+Laravel fica em `http://localhost:8080`; MySQL fica na porta `3306`. As portas e credenciais locais podem ser ajustadas em `.env`. Os valores padrão são placeholders públicos exclusivos para desenvolvimento com dados sintéticos. Não os reutilize fora desse ambiente.
 
-Para parar os serviços: `docker compose down`. Para remover também os dados locais do MySQL: `docker compose down --volumes`.
+Para parar os serviços: `docker compose down`. Para também remover os dados locais do MySQL: `docker compose down --volumes`.
 
 ## Verificação
 
@@ -26,10 +26,10 @@ Para parar os serviços: `docker compose down`. Para remover também os dados lo
 ./scripts/verify.sh
 ```
 
-Este é o ponto único de entrada para validação. Ele confirma a configuração Compose, sobe os serviços se necessário, executa os testes Laravel e verifica o endpoint de saúde HTTP. Lint, análise estática e verificações de segurança serão agregados quando forem adotados.
+Este é o ponto único de entrada para validação. Ele confere a configuração do Compose, a sintaxe dos scripts, o manifesto Composer, os containers e o health check do MySQL, as versões do runtime, o estado das migrations, a suíte de testes e as rotas `/up` e `/admin`.
 
 ## Instruções e escopo
 
-Leia [`AGENTS.md`](AGENTS.md), [`policies/`](policies/), [`docs/PROJECT.md`](docs/PROJECT.md) e [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). `AGENTS.md` é a fonte portátil principal; `CLAUDE.md` apenas aponta para as regras compartilhadas.
+Leia [`AGENTS.md`](AGENTS.md), [`policies/`](policies/), [`docs/PROJECT.md`](docs/PROJECT.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) e [`docs/ROADMAP.md`](docs/ROADMAP.md). `AGENTS.md` é a fonte portátil principal; `CLAUDE.md` é somente um adaptador fino para Claude Code.
 
-O estágio atual prepara engenharia e harness. Beneficiários, benefícios, requisitos, avaliações, regras de elegibilidade e telas de negócio estão fora do escopo.
+O runtime foi certificado no Gate 1. O Gate 1.1 consolida o harness e a documentação em pt-BR. Beneficiários, benefícios, requisitos, avaliações, regras de elegibilidade e telas de negócio continuam fora do escopo até que os gates futuros autorizem esse trabalho.

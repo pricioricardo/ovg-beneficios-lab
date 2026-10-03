@@ -4,7 +4,7 @@ set -eu
 cd /var/www/html
 
 if [ ! -f vendor/autoload.php ]; then
-    echo "Composer dependencies are missing. Run ./scripts/bootstrap.sh first." >&2
+    echo "As dependências Composer não estão instaladas. Execute ./scripts/bootstrap.sh primeiro." >&2
     exit 1
 fi
 

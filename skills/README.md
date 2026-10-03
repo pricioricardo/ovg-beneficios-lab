@@ -1,5 +1,7 @@
-# Shared agent skills
+# Skills compartilhadas para agentes
 
-This directory holds provider-neutral, task-oriented workflows that can be followed by Codex, Claude Code, or a developer. Keep each workflow concise and actionable; reference `AGENTS.md`, `policies/`, `docs/`, and deterministic scripts instead of duplicating them.
+Este diretório reúne fluxos de trabalho independentes de provedor e orientados a tarefas, utilizáveis por Codex, Claude Code ou uma pessoa desenvolvedora. Mantenha cada fluxo conciso e acionável; referencie `AGENTS.md`, `policies/`, `docs/` e os scripts determinísticos em vez de duplicar seu conteúdo.
 
-Add a skill only when a recurring task benefits from a stable sequence and clear validation. Provider-specific adapters may point here, but must not become the only place where essential behavior is defined.
+Adicione uma Skill apenas quando uma tarefa recorrente se beneficiar de uma sequência estável e de validação clara. Adapters específicos de provedores podem apontar para estas Skills, mas não podem ser o único lugar com instruções essenciais.
+
+Use divulgação progressiva (progressive disclosure): comece com instruções breves e carregue referências detalhadas somente quando forem necessárias. Prefira conhecimento procedural reutilizável, portável e organizado em Skills pequenas e focadas.

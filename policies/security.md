@@ -1,9 +1,9 @@
-# Security policy
+# Policy de segurança
 
-- Use synthetic data exclusively. Never use real beneficiary data, even for local testing.
-- Never store secrets in Git, documentation, logs, screenshots, or agent instructions. Use ignored local configuration and secure environment settings.
-- Any example database credentials in Compose are public, local-only placeholders and must not be reused outside synthetic development environments.
-- Never make changes directly in production or assume access to OVG internal systems.
-- Validate and authorize inputs at the application boundary; avoid exposing personal or secret values in logs.
-- Keep dependencies on supported versions and preserve TLS, package-signature, and checksum verification during installation.
-- Report security-relevant failures and unresolved risks instead of bypassing controls.
+- Use exclusivamente dados sintéticos. Nunca use dados reais de beneficiários, nem mesmo em testes locais.
+- Nunca armazene secrets no Git, na documentação, em logs, capturas de tela ou instruções de agentes. Use configuração local ignorada e configurações seguras do ambiente.
+- Credenciais de exemplo do banco no Compose são placeholders públicos, exclusivos para uso local, e não devem ser reutilizados fora de ambientes de desenvolvimento sintéticos.
+- Nunca faça alterações diretamente em produção nem presuma acesso a sistemas internos da OVG.
+- Valide e autorize entradas na fronteira da aplicação; evite expor valores pessoais ou secretos em logs.
+- Mantenha dependências em versões suportadas e preserve TLS, verificação de assinatura de pacotes e checksums durante a instalação.
+- Relate falhas relevantes para segurança e riscos não resolvidos em vez de contornar controles.

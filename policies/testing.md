@@ -1,7 +1,7 @@
-# Testing policy
+# Policy de testes
 
-- Changes that affect behavior or architecture require meaningful automated tests at the appropriate level.
-- Use synthetic fixtures only; tests must not depend on OVG systems or real beneficiary data.
-- Run `./scripts/verify.sh` before declaring work complete and report the checks that ran, failed, or were unavailable.
-- Keep tests deterministic and independent of external services unless the test explicitly validates that integration.
-- Bootstrap checks should exercise the Laravel application and its test suite once dependencies are installed; configuration parsing alone is insufficient.
+- Mudanças que afetem comportamento ou arquitetura exigem testes automatizados relevantes no nível apropriado.
+- Use somente fixtures sintéticas; os testes não podem depender de sistemas da OVG nem de dados reais de beneficiários.
+- Execute `./scripts/verify.sh` antes de declarar o trabalho concluído e informe quais verificações passaram, falharam ou estavam indisponíveis.
+- Mantenha os testes determinísticos e independentes de serviços externos, exceto quando o teste validar explicitamente essa integração.
+- Depois que as dependências estiverem instaladas, as verificações de bootstrap devem exercitar a aplicação Laravel e sua suíte de testes; apenas validar a configuração não é suficiente.

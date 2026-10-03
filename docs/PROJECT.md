@@ -1,25 +1,25 @@
-# Project brief
+# Descrição do projeto
 
-OVG Benefícios Lab is a small experiment to assess agent-assisted software development as a possible future alternative to the team's current low-code approach. It is a fictional laboratory inspired by public descriptions of OVG social programs; it does not reproduce internal systems and does not assume access to them.
+OVG Benefícios Lab é um experimento pequeno para avaliar desenvolvimento assistido por agentes de IA como possível alternativa futura à abordagem low-code atualmente usada pela equipe. O laboratório é fictício e inspirado em descrições públicas de programas sociais da OVG; não reproduz sistemas internos nem pressupõe acesso a eles.
 
-## Product and technical boundaries
+## Limites do produto e da tecnologia
 
-- Use synthetic data only; never import or retain real beneficiary information.
-- Keep the eventual application to no more than 10 screens.
-- Use Laravel, Filament, MySQL, Docker, Git, and automated tests.
-- Keep the engineering workflow usable in Codex Cloud, local VS Code with Docker, Codex, and Claude Code.
-- Keep core instructions provider-neutral. `AGENTS.md` is primary; `CLAUDE.md` is only a short Claude Code adapter.
-- Prefer deterministic scripts for setup and verification.
-- Do not add Redis, queues, Kubernetes, microservices, or infrastructure outside this pilot's needs.
+- Use somente dados sintéticos; nunca importe nem retenha informações reais de beneficiários.
+- Limite a aplicação futura a, no máximo, 10 telas.
+- Use Laravel, Filament, MySQL, Docker, Git e testes automatizados.
+- Mantenha o fluxo de engenharia utilizável no Codex Cloud, em VS Code local com Docker, no Codex e no Claude Code.
+- Mantenha as instruções principais independentes de provedor. `AGENTS.md` é a fonte principal; `CLAUDE.md` é somente um adaptador curto para Claude Code.
+- Prefira scripts determinísticos para setup e verificação.
+- Não adicione Redis, filas, Kubernetes, microsserviços ou infraestrutura além do necessário para este piloto.
 
-## Current milestone
+## Marco atual
 
-Certify the engineering runtime with the baseline in [`TECHNOLOGY_BASELINE.md`](TECHNOLOGY_BASELINE.md). This milestone does not include beneficiaries, benefit entities, eligibility requirements, evaluations, business rules, or business screens. Future domain work requires an explicit task.
+Padronizar o harness e a documentação em pt-BR e consolidar o roadmap do experimento, sem alterar o runtime certificado no Gate 1. Este marco não inclui beneficiários, entidades de benefício, requisitos de elegibilidade, avaliações, regras de negócio ou telas de negócio. Trabalho futuro de domínio exige uma tarefa explícita e os gates previstos.
 
-## Development entry points
+## Entradas de desenvolvimento
 
-- `./scripts/bootstrap.sh` validates prerequisites and prepares local configuration.
-- `docker compose up -d` starts the application and MySQL.
-- `./scripts/verify.sh` is the single entry point for project checks.
+- `./scripts/bootstrap.sh` valida os pré-requisitos e prepara a configuração local.
+- `docker compose up -d` inicia a aplicação e MySQL.
+- `./scripts/verify.sh` é o ponto único de entrada para as verificações do projeto.
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) and [`../policies/`](../policies/) for shared decisions and guardrails.
+Consulte [`ARCHITECTURE.md`](ARCHITECTURE.md) e [`../policies/`](../policies/) para decisões e guardrails compartilhados.

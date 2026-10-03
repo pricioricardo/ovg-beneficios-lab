@@ -1,7 +1,7 @@
-# Git policy
+# Policy de Git
 
-- Do not push directly to `main`; work on a branch and integrate through review.
-- Keep secrets, local environment files, dependency caches, and generated runtime output out of Git.
-- Commit dependency manifests and lockfiles together when dependencies change.
-- Keep commits reviewable and scoped. Do not mix unrelated formatting or generated changes into a feature.
-- Review `git status` and the diff before reporting completion.
+- Não faça push diretamente para `main`; trabalhe em um branch e integre por revisão.
+- Mantenha secrets, arquivos de ambiente locais, caches de dependências e saídas de runtime geradas fora do Git.
+- Faça commit dos manifests e lockfiles de dependências em conjunto quando as dependências mudarem.
+- Mantenha commits revisáveis e com escopo definido. Não misture formatação sem relação ou arquivos gerados a uma funcionalidade.
+- Revise `git status` e o diff antes de informar a conclusão.

@@ -1,14 +1,14 @@
-# ExecPlans
+# ExecPlans (planos de execução)
 
-Use an ExecPlan for work that spans multiple files or steps, changes architecture or data shape, has material risk, or cannot be completed and verified in one focused pass. Small, local changes do not need a plan.
+Use um ExecPlan para trabalhos que envolvam várias etapas ou arquivos, alterem arquitetura ou formato de dados, tragam risco material ou não possam ser concluídos e verificados em uma única etapa focada. Mudanças pequenas e locais não precisam de plano.
 
-Store active plans under `.agent/` using a descriptive name such as `PLAN-filament-auth.md`. A plan should include:
+Armazene os planos ativos em `.agent/` com um nome descritivo, por exemplo `PLAN-filament-auth.md`. Um plano deve incluir:
 
-1. **Goal and scope** — user outcome, explicit exclusions, and acceptance criteria.
-2. **Current state** — relevant code, decisions, constraints, and dependencies.
-3. **Steps** — ordered, actionable changes with files or components named.
-4. **Validation** — exact commands and observable outcomes, including required services.
-5. **Risks and recovery** — data or compatibility concerns and a safe recovery path.
-6. **Progress** — completed work, next action, and blockers, updated as work proceeds.
+1. **Objetivo e escopo** — resultado esperado, exclusões explícitas e critérios de aceite.
+2. **Estado atual** — código, decisões, restrições e dependências relevantes.
+3. **Etapas** — ações em ordem, indicando arquivos ou componentes.
+4. **Validação** — comandos exatos e resultados observáveis, incluindo serviços necessários.
+5. **Riscos e recuperação** — preocupações com dados ou compatibilidade e um caminho seguro de recuperação.
+6. **Progresso** — trabalho concluído, próxima ação e blockers, atualizados durante a execução.
 
-Keep the plan usable by another agent with no chat history. Link relevant policy and architecture decisions instead of copying them. Update `.agent/STATE.md` when the active plan or project stage changes; archive or remove completed plans when they no longer help future work.
+Mantenha o plano útil para outro agente sem o histórico do chat. Aponte para as policies e decisões de arquitetura relevantes em vez de copiá-las. Atualize `.agent/STATE.md` quando o plano ativo ou a etapa do projeto mudar; arquive ou remova planos concluídos quando deixarem de ajudar trabalhos futuros.

@@ -1,31 +1,39 @@
 # OVG Benefícios Lab
 
-## Purpose and scope
+## Objetivo e escopo
 
-This repository is a small, experimental Laravel + Filament application for evaluating agent-assisted engineering. It uses synthetic data only and is inspired by public descriptions of social-benefit programs. It does not reproduce OVG internal systems or assume access to them. Keep the eventual product to at most 10 screens.
+Este repositório é uma aplicação experimental pequena, feita com Laravel e Filament, para avaliar engenharia assistida por agentes. Use somente dados sintéticos. O projeto se inspira em descrições públicas de programas de benefícios sociais, mas não reproduz sistemas internos da OVG nem pressupõe acesso a eles. Mantenha a aplicação futura em, no máximo, 10 telas.
 
-The current stage is engineering bootstrap and harness only. Do not add beneficiaries, benefit entities, eligibility requirements, evaluations, business rules, or business screens unless a later task explicitly authorizes that work.
+A etapa atual trata somente da engenharia e do harness. Não adicione beneficiários, entidades de benefícios, requisitos de elegibilidade, avaliações, regras de negócio ou telas de negócio, a menos que uma tarefa futura autorize explicitamente esse trabalho.
 
-## Portable working rules
+## Idioma oficial do projeto
 
-- Treat this file and `policies/`, `skills/`, `scripts/`, and `docs/` as the shared source of truth across Codex, Claude Code, and local development.
-- Read the applicable files in `policies/` before making a substantial change. Follow `docs/ARCHITECTURE.md` and record material decisions there.
-- Use only synthetic data. Never put secrets in Git. Never assume access to OVG internal systems or make changes directly in production.
-- Do not push directly to `main`. Work on a branch and use review before integration.
-- Add or update meaningful automated tests for relevant behavior. Do not claim completion until `scripts/verify.sh` passes; report any unavailable checks precisely.
-- Treat consolidated migrations as immutable. Add a new migration for a later schema change.
-- Prefer deterministic scripts and repository-supported configuration over repeated prose instructions.
-- For complex changes, follow `.agent/PLANS.md` and keep `.agent/STATE.md` concise and current.
-- Keep provider-specific behavior in thin adapters such as `CLAUDE.md`; do not move shared policy into `.claude/` or `.codex/`.
-- Use the existing checkout in cloud tasks. Do not create a Git worktree unless the user asks for one.
+- Português do Brasil (pt-BR) é o idioma padrão do harness, da documentação e das instruções humanas deste projeto.
+- Escreva documentação, policies, planos, estado e instruções humanas de Skills novas em pt-BR.
+- Relatórios de agentes devem preferir pt-BR.
+- Preserve identificadores técnicos necessários para interoperabilidade, incluindo comandos, nomes de classes, namespaces, métodos, propriedades, variáveis, pacotes, chaves de configuração, paths, arquivos, branches e nomes oficiais de tecnologias.
+- Uma tradução nunca pode mudar o sentido de guardrails, critérios de aceite, comandos ou contratos.
 
-## Working in this repository
+## Regras de trabalho portáteis
 
-- Bootstrap or refresh local prerequisites with `./scripts/bootstrap.sh`.
-- Start the application and MySQL with `docker compose up -d --build` on a fresh checkout, or `docker compose up -d` after its image has been built.
-- Run the canonical checks with `./scripts/verify.sh`.
-- Review `docker compose ps` and application logs when startup or checks fail. Stop only services started for the task when appropriate.
+- Este arquivo e `policies/`, `skills/`, `scripts/` e `docs/` são a fonte compartilhada para Codex, Claude Code e desenvolvimento local.
+- Antes de uma alteração substancial, leia os arquivos aplicáveis em `policies/`. Siga `docs/ARCHITECTURE.md` e registre nele decisões materiais.
+- Use somente dados sintéticos. Nunca inclua secrets no Git. Nunca presuma acesso a sistemas internos da OVG nem faça alterações diretamente em produção.
+- Não faça push diretamente para `main`. Trabalhe em um branch e use revisão antes da integração.
+- Adicione ou atualize testes automatizados relevantes para mudanças de comportamento. Não declare o trabalho concluído até `scripts/verify.sh` passar; informe com precisão qualquer verificação indisponível.
+- Trate migrations consolidadas como imutáveis. Para uma mudança de schema posterior, adicione uma nova migration.
+- Prefira scripts determinísticos e configurações suportadas pelo repositório a instruções repetidas em prosa.
+- Para mudanças complexas, siga `.agent/PLANS.md` e mantenha `.agent/STATE.md` conciso e atualizado.
+- Mantenha o comportamento específico de cada provedor em adaptadores finos, como `CLAUDE.md`; não mova políticas compartilhadas para `.claude/` ou `.codex/`.
+- Use o checkout existente nas tarefas Cloud. Não crie um Git worktree a menos que o usuário solicite.
 
-## Completion report
+## Trabalho neste repositório
 
-State the change, the checks actually run and their results, and any remaining blocker. Keep `.agent/STATE.md` aligned with the real repository state. Do not implement out-of-scope domain behavior as a bootstrap shortcut.
+- Prepare ou atualize os pré-requisitos locais com `./scripts/bootstrap.sh`.
+- Em um checkout novo, inicie a aplicação e MySQL com `docker compose up -d --build`; depois que a imagem estiver construída, use `docker compose up -d`.
+- Execute as verificações canônicas com `./scripts/verify.sh`.
+- Consulte `docker compose ps` e os logs da aplicação quando a inicialização ou as verificações falharem. Quando apropriado, pare somente os serviços iniciados para a tarefa.
+
+## Relatório de conclusão
+
+Informe a mudança, as verificações realmente executadas e seus resultados, além de qualquer blocker restante. Mantenha `.agent/STATE.md` alinhado ao estado real do repositório. Não implemente comportamento de domínio fora do escopo como atalho para preparar o bootstrap.
