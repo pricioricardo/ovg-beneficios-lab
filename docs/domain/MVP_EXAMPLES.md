@@ -9,7 +9,7 @@ Os exemplos abaixo validam o poder expressivo do contrato. São pseudoconfigura�
 - `parameter` referencia um Parâmetro versionado, nunca uma variável livre.
 - A Versão de Regra completa permanece sujeita à validação, publicação, vigência e imutabilidade.
 
-Para este laboratório, `MES_GESTACIONAL` é derivado de data provável do parto e data de referência usando gestação convencional de 280 dias. Calcula-se `semanas = floor((280 - dias_ate_o_parto) / 7)` e então `mes = floor(semanas / 4) + 1`, limitado de 1 a 10. A fórmula, suas entradas e o valor entram no snapshot. Essa convenção é experimental e não orientação clínica.
+Para este laboratório, o servidor captura um único instante corrente em UTC no início da Avaliação e interpreta sua data local em `America/Sao_Paulo`. `MES_GESTACIONAL` usa essa data, a data provável do parto e uma gestação convencional de 280 dias. Primeiro valida `0 <= dias_ate_o_parto <= 280`; fora dessa faixa, a DPP é inconsistente e o fato é `INDETERMINADA`, sem ajuste automático. Com entradas válidas, calcula `semanas = floor((280 - dias_ate_o_parto) / 7)` e `mes = min(10, floor(semanas / 4) + 1)`. Fórmula, entradas, valor e versão semântica do Requisito entram no snapshot. Essa convenção é experimental e não orientação clínica.
 
 ## A. Fralda infantil
 
@@ -58,6 +58,7 @@ all:
           - condition: { requirement: GESTANTE, operator: EQ, value: true }
           - condition: { requirement: MES_GESTACIONAL, operator: GTE, value: 5 }
       - all:
+          - condition: { requirement: NASCIMENTO_BEBE_OCORRIDO, operator: EQ, value: true }
           - condition: { requirement: DIAS_APOS_NASCIMENTO_BEBE, operator: GTE, value: 0 }
           - condition: { requirement: DIAS_APOS_NASCIMENTO_BEBE, operator: LTE, value: 30 }
   - any:
@@ -65,7 +66,8 @@ all:
       - condition: { requirement: ULTRASSONOGRAFIA, operator: PRESENT }
 ```
 
-- O primeiro grupo aceita gestação a partir do 5º mês ou de 0 a 30 dias após o nascimento.
+- O primeiro grupo aceita gestação a partir do 5º mês ou nascimento ocorrido de 0 a 30 dias antes da Avaliação. O nascimento do episódio encerra `GESTANTE`; sua data não pode ser futura.
+- Gestante no terceiro mês, com `NASCIMENTO_BEBE_OCORRIDO = false`, tem período `NAO_ATENDIDA`. A ausência legítima da data de nascimento não vira análise humana porque o guardião falso determina o ramo pós-parto. Nascimento desconhecido permanece `INDETERMINADA` se não houver outro ramo decisivo.
 - O segundo grupo exige ao menos uma das duas Comprovações.
 - Período atendido com ambos os documentos ausentes resulta em `PENDENTE_DOCUMENTACAO`.
 - Uma das Comprovações presente satisfaz o grupo documental.
@@ -84,7 +86,7 @@ all:
 
 - A Avaliação resolve a versão de `SALARIO_MINIMO` vigente na data de referência e registra versão e valor no snapshot.
 - Autonomia funcional não informada resulta em `REQUER_ANALISE_HUMANA` se nenhum outro filho tornar o `AND` definitivamente falso.
-- Idade ou renda acima do limite resulta em `INELEGIVEL`.
+- Idade abaixo de 60 anos ou renda acima do limite resulta em `INELEGIVEL`.
 
 ## Mudança simples sem código PHP
 

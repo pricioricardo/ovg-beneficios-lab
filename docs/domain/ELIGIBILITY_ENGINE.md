@@ -24,6 +24,8 @@ São explicitamente proibidos:
 
 O código da aplicação implementará resolvedores previamente registrados para cada Requisito e avaliará somente a estrutura declarativa validada.
 
+Cada Requisito tem **código lógico e versão semântica imutável**. A Condição de uma Versão de Regra publicada fixa essa versão semântica. Uma alteração no resolvedor ou na fórmula capaz de mudar o resultado exige nova versão semântica do Requisito e nova Versão de Regra; é proibido mudar silenciosamente o comportamento de uma versão já referenciada. Fatos derivados registram essa versão no snapshot, sem armazenar código PHP, hashes executáveis ou plugins no banco.
+
 ## Forma declarativa
 
 Uma Regra de Elegibilidade é exatamente um destes nós:
@@ -79,8 +81,9 @@ Três níveis acomodam os casos do laboratório, inclusive `A OR (B AND C)`, sem
 | `DEFICIENCIA` | `BOOLEAN` | Beneficiário. |
 | `LIMITACAO_MOBILIDADE` | `BOOLEAN` | Beneficiário. |
 | `GESTANTE` | `BOOLEAN` | Beneficiário. |
+| `NASCIMENTO_BEBE_OCORRIDO` | `BOOLEAN` | Estado controlado do episódio gestacional; `null` representa desconhecido, nunca `false`. |
 | `MES_GESTACIONAL` | `INTEGER` | Derivado da data provável do parto pela convenção do laboratório. |
-| `DIAS_APOS_NASCIMENTO_BEBE` | `INTEGER` | Derivado da data de nascimento do bebê. |
+| `DIAS_APOS_NASCIMENTO_BEBE` | `INTEGER` | Derivado somente se nascimento ocorreu e sua data é válida. |
 | `AUTONOMIA_FUNCIONAL` | `BOOLEAN` | Beneficiário. |
 | `LAUDO_MEDICO` | `DOCUMENT_PRESENCE` | Comprovação. |
 | `RELATORIO_PROFISSIONAL` | `DOCUMENT_PRESENCE` | Comprovação. |
@@ -91,7 +94,7 @@ Outros tipos de Comprovação podem existir no cadastro sem participar das cinco
 
 ## Parâmetros de Referência
 
-Parâmetros entram no MVP para fatos globais versionáveis. A primeira necessidade é `SALARIO_MINIMO`, do tipo `DECIMAL`.
+Parâmetros entram no MVP para fatos globais versionáveis. A primeira necessidade é `SALARIO_MINIMO`, do tipo `DECIMAL`, com valor monetário exato em centavos.
 
 Cada valor de Parâmetro possui:
 
@@ -104,7 +107,9 @@ Cada valor de Parâmetro possui:
 
 Parâmetros podem usar `BOOLEAN`, `INTEGER`, `DECIMAL`, `DATE` ou `ENUM`. `DOCUMENT_PRESENCE` não aceita Parâmetro, pois sua presença sempre vem de uma Comprovação do Beneficiário.
 
-Ao iniciar uma Avaliação, o motor resolve o valor vigente no instante de referência. A versão e o valor resolvidos entram no snapshot. Não pode haver sobreposição de vigências publicadas para o mesmo código. Ausência ou ambiguidade de parâmetro impede concluir automaticamente e gera erro controlado de configuração, sem executar a regra com valor presumido.
+A Regra referencia apenas o **código lógico** do Parâmetro. Ao iniciar uma Avaliação, o motor resolve a versão vigente e o valor no mesmo instante de referência UTC usado para a Versão de Regra e os fatos. A versão e o valor resolvidos entram no snapshot e permanecem fixos até a conclusão. A publicação de nova versão de Parâmetro é imediata, com troca atômica em um único instante `T` e vigências `[início, fim)` sem sobreposição para o mesmo código; não se agenda versão publicada futura no MVP. Ausência ou ambiguidade de parâmetro impede concluir automaticamente e gera erro controlado de configuração, sem executar a regra com valor presumido.
+
+Comparações monetárias nunca usam `float` ou arredondamento de exibição. Para renda familiar `R` em centavos, `N > 0` integrantes e limite per capita `L` em centavos, `R / N <= L` é decidido exatamente por `R <= L * N`. O snapshot guarda `R`, `N`, `L` e a versão do Parâmetro. Somente o valor apresentado ao usuário pode ser arredondado a duas casas.
 
 ## Validação antes da publicação
 
@@ -113,7 +118,7 @@ Uma Versão de Regra só pode ser publicada quando:
 - árvore, profundidade e quantidade de Condições forem válidas;
 - cada Requisito estiver ativo e tiver resolvedor conhecido;
 - operador e operandos forem compatíveis com o tipo;
-- cada referência de Parâmetro existir, tiver tipo compatível e puder ser resolvida para a vigência planejada;
+- cada código de Parâmetro existir, tiver tipo compatível e versão vigente resolvível para a publicação imediata;
 - todos os rótulos necessários à explicação estiverem presentes;
 - a vigência não conflitar com outra versão publicada do mesmo Benefício;
 - não houver código, SQL ou expressão livre em nenhum campo.
@@ -130,6 +135,8 @@ Cada Condição produz um dos desfechos intermediários:
 O resultado registra o valor observado, o operando esperado, eventual Parâmetro resolvido e uma mensagem baseada em template conhecido. A mensagem não é gerada por IA.
 
 Para `DOCUMENT_PRESENCE`, `PRESENT` com estado efetivo ausente ou vencido produz `DOCUMENTACAO_PENDENTE`; com presença válida, produz `ATENDIDA`. `NOT_PRESENT` inverte a comparação: ausência efetiva produz `ATENDIDA` e presença válida produz `NAO_ATENDIDA`. Estado documental inconsistente ou desconhecido produz `INDETERMINADA`.
+
+Um fato numérico dependente de outro estado, como `MES_GESTACIONAL` ou `DIAS_APOS_NASCIMENTO_BEBE`, só é resolvido com entradas coerentes. Se o estado guardião for falso, a condição numérica pode ser `INDETERMINADA`, mas o `AND` do ramo é `NAO_ATENDIDA` pela precedência definida abaixo. Se o estado guardião for desconhecido ou as entradas forem inconsistentes, não se converte a ausência em zero ou falso; o ramo permanece `INDETERMINADA`, salvo outra condição decisiva.
 
 ## Semântica de grupos e precedência
 
@@ -165,3 +172,5 @@ O desfecho da raiz é mapeado assim:
 `NAO_APLICAVEL` não entra no MVP. Benefício inativo, ausência de versão vigente ou entrada estruturalmente inválida impedem criar/concluir uma Avaliação; não são resultados de elegibilidade. Critérios de aplicabilidade pertencem à própria regra e, quando não atendidos, levam a `INELEGIVEL`.
 
 O resultado automático é uma análise técnica do laboratório. Ele nunca representa concessão, negativa oficial ou autoridade final. Uma futura Decisão Final humana será preservada separadamente.
+
+A demonstração exibe os rótulos “ELEGÍVEL”, “INELEGÍVEL”, “PENDENTE DE DOCUMENTAÇÃO” e “REQUER ANÁLISE HUMANA”. Não exibe “APROVADO” ou “REPROVADO” como sinônimos desses resultados.

@@ -23,6 +23,20 @@
 - [x] O domínio cabe em nove telas futuras, abaixo do limite de dez.
 - [x] Limites e exclusões do MVP estão explícitos.
 - [x] Nenhuma implementação de domínio faz parte deste gate.
+- [x] O servidor captura uma única vez o instante corrente da Avaliação em UTC, sem retroatividade ou agendamento; cálculos de calendário usam `America/Sao_Paulo` e reavaliação cria nova execução.
+- [x] Regra, Parâmetros, entradas e validade documental são selecionados consistentemente pelo mesmo instante imutável.
+- [x] Vigências usam `[início, fim)` e versões publicadas futuras não são agendadas.
+- [x] Publicação/substituição imediata encerram a versão anterior e iniciam a sucessora atomicamente no mesmo `T`.
+- [x] Conteúdo publicado imutável está distinguido de metadados controlados de ciclo de vida.
+- [x] O cadastro representa um episódio gestacional coerente, com DPP válida e encerramento da gestação ao ocorrer nascimento.
+- [x] `NASCIMENTO_BEBE_OCORRIDO` distingue `true`, `false` e desconhecido; a ausência legítima da data não produz análise humana por si só.
+- [x] Comprovações têm apresentação não futura, validade não anterior à apresentação, limite inclusivo e `VENCIDA` derivado.
+- [x] Valores monetários em centavos e comparação exata impedem arredondamento de apresentação de alterar elegibilidade.
+- [x] Uma Versão de Regra fixa a versão semântica do Requisito/resolvedor; o snapshot a registra.
+- [x] O identificador sintético local não usa formato de CPF potencialmente real.
+- [x] A demonstração apresenta somente resultados de elegibilidade, sem chamar os estados de aprovação/reprovação.
+- [x] Exemplos do Kit Enxoval e do centro de idosos refletem os fatos e limites corretos.
+- [x] Relações condicionais de Condições, Grupos, Parâmetros e Resultados estão documentadas sem cardinalidades enganosas.
 
 ## Decisões propostas para congelamento
 
@@ -34,11 +48,14 @@ O Gate 2 está pronto para revisão e congelamento com estas decisões deliberad
 4. no máximo três níveis de grupos e 30 Condições por versão;
 5. `NAO_APLICAVEL` fora dos estados automáticos do MVP;
 6. Parâmetro de Referência incluído, começando por `SALARIO_MINIMO`;
-7. versões publicadas e Avaliações concluídas imutáveis;
+7. conteúdo de versões publicadas e Avaliações concluídas imutáveis, com metadados controlados de ciclo;
 8. snapshot híbrido: relações + JSON controlado + resultados por nó;
 9. Decisão Final humana fora do MVP e sempre separada do resultado automático;
 10. optimistic locking fora do MVP; publicação protegida por transação e restrições;
-11. convenção gestacional sintética e determinística descrita em `MVP_EXAMPLES.md`.
+11. convenção gestacional sintética e determinística descrita em `MVP_EXAMPLES.md`;
+12. instante capturado pelo servidor em UTC, com calendário `America/Sao_Paulo` e publicação imediata;
+13. identificador sintético local fora do formato CPF;
+14. demonstração restrita a elegibilidade técnica, sem aprovação ou reprovação administrativa.
 
 Esses pontos não bloqueiam a consistência do contrato, mas devem ser aceitos explicitamente ao congelar o Gate 2. Qualquer mudança posterior deve atualizar o contrato e as ADRs antes da implementação correspondente.
 

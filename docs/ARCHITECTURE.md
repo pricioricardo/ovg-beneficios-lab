@@ -31,21 +31,21 @@ Use uma aplicação Laravel com Filament como framework da interface administrat
 
 - **Status:** Proposto para congelamento no Gate 2.
 - **Contexto:** Critérios simples devem mudar sem alteração de PHP, mas uma engine arbitrária ampliaria risco, custo de manutenção e dificuldade de auditoria para um piloto de até dez telas.
-- **Decisão:** Representar regras como árvores limitadas de Condições tipadas e grupos `AND`/`OR`. Requisitos, tipos, operadores, fontes e parâmetros pertencem a catálogos fechados. Proibir código, SQL, scripts, paths técnicos e expressões livres. Limitar cada versão a três níveis de grupos e 30 Condições.
-- **Consequências:** Analistas podem ajustar valores e combinações dentro do vocabulário aprovado. Novos fatos ou semânticas exigem evolução explícita do produto. Validação completa ocorre antes da publicação, e cada nó produz resultado explicável.
+- **Decisão:** Representar regras como árvores limitadas de Condições tipadas e grupos `AND`/`OR`. Requisitos, tipos, operadores, fontes e parâmetros pertencem a catálogos fechados. Cada Condição publicada fixa a versão semântica do Requisito; mudança de resolvedor capaz de alterar resultado exige nova versão semântica e nova Versão de Regra. Proibir código, SQL, scripts, paths técnicos e expressões livres. Limitar cada versão a três níveis de grupos e 30 Condições.
+- **Consequências:** Analistas podem ajustar valores e combinações dentro do vocabulário aprovado. Novos fatos ou semânticas exigem evolução explícita do produto, sem trocar silenciosamente resolvedores publicados. Validação completa ocorre antes da publicação, e cada nó produz resultado explicável.
 
 ### ADR-005: Versões publicadas de regras são imutáveis
 
 - **Status:** Proposto para congelamento no Gate 2.
 - **Contexto:** Avaliações antigas precisam continuar explicáveis quando critérios ou parâmetros mudarem.
-- **Decisão:** Versões seguem `RASCUNHO`, `PUBLICADA`, `SUBSTITUIDA` ou `INATIVA`. A publicação congela a árvore e as referências; mudanças criam uma sucessora com vigência não sobreposta. Parâmetros globais também mantêm versões e vigências rastreáveis.
-- **Consequências:** Uma Avaliação sempre aponta à versão vigente usada no instante de referência. Correções não reescrevem histórico. A publicação futura precisará de transação e restrições, mas não de optimistic locking geral no MVP.
+- **Decisão:** Versões seguem `RASCUNHO`, `PUBLICADA`, `SUBSTITUIDA` ou `INATIVA`. A publicação imediata congela conteúdo e significado, mas permite atualizar estado, fim de vigência e metadados de encerramento somente pelas transições autorizadas. A troca para uma sucessora encerra a anterior e inicia a nova atomicamente no mesmo instante `T`, em vigências `[início, fim)` não sobrepostas. Versões futuras permanecem rascunho. Parâmetros globais seguem a mesma disciplina; a Regra guarda seu código lógico e a Avaliação resolve a versão vigente.
+- **Consequências:** A Avaliação mantém regra e parâmetros capturados no início mesmo durante uma troca. Correções não reescrevem histórico. A publicação precisará de transação e restrições, sem optimistic locking geral no MVP.
 
 ### ADR-006: Snapshot histórico híbrido das avaliações
 
 - **Status:** Proposto para congelamento no Gate 2.
 - **Contexto:** Dados cadastrais, idade, documentos, regras e parâmetros podem mudar depois de uma Avaliação.
-- **Decisão:** Manter referências relacionais às entidades e versões, um snapshot JSON controlado e versionado das entradas/derivações e Resultados de Avaliação relacionais para cada nó da árvore.
-- **Consequências:** Avaliações concluídas ficam imutáveis e explicáveis sem consultar o estado atual do Beneficiário. O JSON não substitui identidade e integridade relacionais. A implementação deverá versionar e validar seu schema.
+- **Decisão:** O servidor captura uma vez o instante corrente em UTC no início da Avaliação, sem escolha retroativa ou futura pelo usuário. Cálculos de calendário usam `America/Sao_Paulo`; o mesmo instante seleciona regra, parâmetros e validade documental. Manter referências relacionais às entidades e versões, um snapshot JSON controlado e versionado das entradas/derivações e Resultados de Avaliação relacionais para cada nó da árvore. Valores monetários decisórios são exatos em centavos, sem `float` ou arredondamento de exibição.
+- **Consequências:** Avaliações concluídas ficam imutáveis e explicáveis sem consultar o estado atual do Beneficiário. Snapshot, resultados por nó e conclusão precisam ser persistidos consistentemente. O JSON não substitui identidade e integridade relacionais. A implementação deverá versionar e validar seu schema.
 
 Registre futuras decisões materiais com status, contexto, decisão e consequências. Não reescreva uma migration consolidada para expressar uma mudança posterior de schema; adicione uma nova migration.

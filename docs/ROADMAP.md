@@ -24,9 +24,9 @@ Padronização das instruções e documentação em português do Brasil, inclus
 
 ## GATE 2 — Contrato de Domínio
 
-**Status:** READY TO FREEZE
+**Status:** READY TO FREEZE — aguardando nova revisão
 
-O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A proposta adota engine declarativa restrita, versões publicadas imutáveis e snapshot histórico híbrido. Está pronta para revisão e congelamento, sem migration ou implementação. Nenhuma implementação poderá ocorrer antes do congelamento e da aprovação desse contrato.
+O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A proposta adota engine declarativa restrita, conteúdo publicado historicamente imutável e snapshot histórico híbrido. Os blockers da revisão independente foram corrigidos documentalmente neste branch. A próxima ação é nova revisão antes de congelar e integrar. Nenhuma implementação poderá ocorrer antes de nova revisão, congelamento e aprovação desse contrato.
 
 ## GATE 3 — Primeira Implementação Funcional
 
@@ -48,6 +48,8 @@ As etapas abaixo são intenções futuras e não estão autorizadas por este gat
 - benchmark Scriptcase x Laravel/Filament;
 - ambiente local com VS Code + Docker;
 - preparação da demonstração e apresentação executiva.
+
+A futura demonstração apresentará **análise de elegibilidade**, com os rótulos “ELEGÍVEL”, “INELEGÍVEL”, “PENDENTE DE DOCUMENTAÇÃO” e “REQUER ANÁLISE HUMANA”. Não tratará esses resultados como aprovação ou reprovação administrativa; Decisão Final humana fica fora do MVP.
 
 ## Intenção futura: Model Routing / Capability-Cost Routing
 
