@@ -24,13 +24,13 @@ Padronização das instruções e documentação em português do Brasil, inclus
 
 ## GATE 2 — Contrato de Domínio
 
-**Status:** READY TO FREEZE — aguardando nova revisão
+**Status:** PASS / FROZEN
 
-O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A proposta adota engine declarativa restrita, conteúdo publicado historicamente imutável e snapshot histórico híbrido. Os blockers da revisão independente foram corrigidos documentalmente neste branch. A próxima ação é nova revisão antes de congelar e integrar. Nenhuma implementação poderá ocorrer antes de nova revisão, congelamento e aprovação desse contrato.
+O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A revisão independente final aprovou o freeze; o contrato está congelado. Nenhuma implementação de domínio ocorreu. O Gate 3 é o próximo gate planejado e não foi iniciado nesta tarefa.
 
 ## GATE 3 — Primeira Implementação Funcional
 
-**Status:** PLANEJADO — NÃO AUTORIZADO
+**Status:** PLANEJADO — NÃO INICIADO
 
 Implementar o menor fluxo útil aprovado no Gate 2. O escopo dependerá da aprovação daquele contrato.
 

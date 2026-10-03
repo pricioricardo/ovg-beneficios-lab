@@ -74,3 +74,9 @@ Esses pontos não bloqueiam a consistência do contrato, mas devem ser aceitos e
 - [x] `git diff --check` passa.
 - [x] O diff não altera migrations, Models, Resources, Services, runtime ou baseline.
 - [x] `docs/ROADMAP.md` e `.agent/STATE.md` registram o resultado real.
+
+## Freeze formal
+
+- [x] Revisão final independente concluída com `GATE 2 — FREEZE APPROVED`.
+- [x] Nenhum blocker de freeze permanece.
+- [x] O contrato está formalmente congelado; nenhuma implementação de domínio foi realizada no Gate 2.
