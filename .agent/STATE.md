@@ -1,15 +1,13 @@
 # Estado do projeto
 
-- **Gate atual:** GATE 1.1 — PASS. O Gate 0 está CONSOLIDADO e o Gate 1 está PASS. O Gate 2 continua planejado e não foi iniciado.
-- **Integração Git:** o Gate 1 foi certificado em `chore/gate-001-runtime-certification`, commit `fef41c4cb2c5d7f97129647dbae0a76e24bd163c`, e integrado a `work` pelo merge commit `f5b03e2ea64a925c9609e717a4cc72d6cf467946`.
-- **Branch deste gate:** `chore/gate-001b-harness-ptbr`, criado a partir de `work` em `f5b03e2ea64a925c9609e717a4cc72d6cf467946`.
-- **Baseline certificada, sem alteração neste gate:** PHP 8.4.26, Laravel 13.34.0, Filament 5.9.0, Livewire 4.4.7, MySQL 8.4.11, Composer 2.8.12 e Docker Compose v2.40.3. As versões exatas dos pacotes PHP permanecem em `composer.lock`.
-- **Runtime certificado:** `./scripts/bootstrap.sh` e `./scripts/verify.sh` passaram no Gate 1. Laravel conecta ao MySQL, as migrations padrão estão aplicadas e `/up` e `/admin` respondem. O painel Filament mantém a autenticação padrão e `/admin` redireciona para login.
-- **Escopo de domínio:** nenhuma entidade de Beneficiário, Benefício, Requisito, Regra de Elegibilidade, Avaliação ou Resultado de Avaliação foi criada. Não há dashboards de negócio nem dados reais.
-- **Exceção de continuidade Cloud:** duas novas tarefas Codex Cloud foram iniciadas para validar retomada a partir de `origin/work`; ambas falharam antes de qualquer alteração por indisponibilidade do proxy interno na porta 8080. No workspace atual, `github.com`, `api.github.com` e `git ls-remote origin refs/heads/work` responderam, este último com `f5b03e2ea64a925c9609e717a4cc72d6cf467946`. Por isso, este Gate 1.1 é executado excepcionalmente neste workspace. A exceção não invalida o Git nem o harness persistido. A retomada em novo workspace deverá ser revalidada em gate posterior após a normalização da conectividade Cloud. Nenhuma configuração de proxy ou da infraestrutura Cloud foi alterada.
-- **Blockers deste workspace:** nenhum conhecido para a execução documental. A indisponibilidade relatada permanece uma ressalva para tarefas em novos workspaces Cloud.
-- **Resultado do Gate 1.1:** o harness e a documentação foram padronizados em pt-BR; `docs/ROADMAP.md` é a visão canônica dos gates. A revisão confirmou equivalência semântica, comandos e identificadores preservados, e ausência de alterações ao runtime ou à baseline.
-- **Verificação deste gate:** `./scripts/verify.sh` passou integralmente: Compose, sintaxe shell, Composer, MySQL saudável, versões de PHP/Laravel/Filament/Livewire, migrations, 2 testes com 3 assertions, `/up`, `/admin` e `git diff --check`.
-- **Blockers:** nenhum conhecido para o Gate 1.1 neste workspace. Permanece a ressalva de continuidade em novos workspaces Codex Cloud, descrita acima e a ser revalidada em gate posterior.
-- **Próximo passo:** GATE 2 — Contrato de Domínio — PLANEJADO. Não está autorizado nem iniciado por este registro.
-- **Histórico editorial:** o conteúdo deste estado foi traduzido durante o Gate 1.1. Identificadores, versões, SHAs e resultados históricos foram preservados.
+- **Gate atual:** GATE 2 — READY TO FREEZE. O Gate 0 está CONSOLIDADO; os Gates 1 e 1.1 estão PASS. O Gate 3 não foi iniciado.
+- **Branch:** `docs/gate-002-domain-contract`, criada de `origin/work` em `93ccb95e280c54c91b35a62c57360d9149145cc3`.
+- **Contrato produzido:** `docs/domain/` define Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação, com cinco exemplos fictícios e critérios de aceite.
+- **Decisões propostas:** engine declarativa restrita; catálogo tipado de Requisitos; grupos `AND`/`OR` limitados; Parâmetros versionados; versões publicadas imutáveis; snapshot histórico híbrido; quatro estados automáticos separados de decisão humana; sem optimistic locking geral no MVP.
+- **ADRs:** ADR-004, ADR-005 e ADR-006 estão propostas para congelamento em `docs/ARCHITECTURE.md`.
+- **Baseline certificada, sem alteração:** PHP 8.4.26, Laravel 13.34.0, Filament 5.9.0, Livewire 4.4.7, MySQL 8.4.11, Composer 2.8.12 e Docker Compose v2.40.3.
+- **Implementação:** nenhuma migration, Model, Resource, Service, tabela, tela ou regra executável foi criada. Não houve alteração de banco, runtime ou autenticação; somente o contrato documental foi produzido.
+- **Verificação:** `./scripts/verify.sh` passou com Compose e sintaxe válidos, MySQL saudável, versões certificadas, migrations existentes, 2 testes com 3 assertions, `/up`, `/admin` e `git diff --check`.
+- **Pontos para congelamento:** aceitar explicitamente os limites de três níveis/30 Condições, a ausência de `IN` e `NAO_APLICAVEL`, a convenção gestacional sintética, a inclusão de `SALARIO_MINIMO` versionado e o adiamento de Decisão Final humana. Esses pontos estão decididos no contrato e não impedem a revisão.
+- **Blockers:** nenhum conhecido neste workspace. Permanece a ressalva histórica de continuidade em novos workspaces Codex Cloud; a capacidade deverá ser revalidada quando a conectividade Cloud estiver normalizada. Nenhuma configuração Cloud ou de proxy foi alterada neste gate.
+- **Próximo passo:** revisar e congelar formalmente o contrato do Gate 2 e integrar este branch quando autorizado. O Gate 3 depende dessa aprovação e não está iniciado nem autorizado por este estado.

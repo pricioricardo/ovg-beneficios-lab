@@ -27,4 +27,25 @@ Use uma aplicação Laravel com Filament como framework da interface administrat
 - **Decisão:** Defina somente os serviços `app` e `mysql`, com um volume nomeado para os dados MySQL e um health check para ordenar a inicialização.
 - **Consequências:** As dependências da aplicação são fixadas pelo Composer. O `.env` local e secrets ficam fora do Git. A verificação usa um script determinístico.
 
+### ADR-004: Engine declarativa restrita para elegibilidade
+
+- **Status:** Proposto para congelamento no Gate 2.
+- **Contexto:** Critérios simples devem mudar sem alteração de PHP, mas uma engine arbitrária ampliaria risco, custo de manutenção e dificuldade de auditoria para um piloto de até dez telas.
+- **Decisão:** Representar regras como árvores limitadas de Condições tipadas e grupos `AND`/`OR`. Requisitos, tipos, operadores, fontes e parâmetros pertencem a catálogos fechados. Proibir código, SQL, scripts, paths técnicos e expressões livres. Limitar cada versão a três níveis de grupos e 30 Condições.
+- **Consequências:** Analistas podem ajustar valores e combinações dentro do vocabulário aprovado. Novos fatos ou semânticas exigem evolução explícita do produto. Validação completa ocorre antes da publicação, e cada nó produz resultado explicável.
+
+### ADR-005: Versões publicadas de regras são imutáveis
+
+- **Status:** Proposto para congelamento no Gate 2.
+- **Contexto:** Avaliações antigas precisam continuar explicáveis quando critérios ou parâmetros mudarem.
+- **Decisão:** Versões seguem `RASCUNHO`, `PUBLICADA`, `SUBSTITUIDA` ou `INATIVA`. A publicação congela a árvore e as referências; mudanças criam uma sucessora com vigência não sobreposta. Parâmetros globais também mantêm versões e vigências rastreáveis.
+- **Consequências:** Uma Avaliação sempre aponta à versão vigente usada no instante de referência. Correções não reescrevem histórico. A publicação futura precisará de transação e restrições, mas não de optimistic locking geral no MVP.
+
+### ADR-006: Snapshot histórico híbrido das avaliações
+
+- **Status:** Proposto para congelamento no Gate 2.
+- **Contexto:** Dados cadastrais, idade, documentos, regras e parâmetros podem mudar depois de uma Avaliação.
+- **Decisão:** Manter referências relacionais às entidades e versões, um snapshot JSON controlado e versionado das entradas/derivações e Resultados de Avaliação relacionais para cada nó da árvore.
+- **Consequências:** Avaliações concluídas ficam imutáveis e explicáveis sem consultar o estado atual do Beneficiário. O JSON não substitui identidade e integridade relacionais. A implementação deverá versionar e validar seu schema.
+
 Registre futuras decisões materiais com status, contexto, decisão e consequências. Não reescreva uma migration consolidada para expressar uma mudança posterior de schema; adicione uma nova migration.

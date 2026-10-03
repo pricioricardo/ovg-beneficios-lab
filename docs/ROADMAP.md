@@ -24,9 +24,9 @@ Padronização das instruções e documentação em português do Brasil, inclus
 
 ## GATE 2 — Contrato de Domínio
 
-**Status:** PLANEJADO — NÃO AUTORIZADO
+**Status:** READY TO FREEZE
 
-Antes de qualquer migration ou implementação, modelar Beneficiário, Benefício, Requisito, Regra de Elegibilidade, Avaliação e Resultado de Avaliação. O contrato deverá definir responsabilidades, relacionamentos, invariantes, estados, versionamento de regras, explicabilidade, critérios de aceite e limites do MVP. Nenhuma implementação poderá ocorrer antes da aprovação desse contrato.
+O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benefício, Comprovação, Requisito, Versão de Regra, Regra de Elegibilidade, Parâmetro de Referência, Avaliação e Resultado de Avaliação. A proposta adota engine declarativa restrita, versões publicadas imutáveis e snapshot histórico híbrido. Está pronta para revisão e congelamento, sem migration ou implementação. Nenhuma implementação poderá ocorrer antes do congelamento e da aprovação desse contrato.
 
 ## GATE 3 — Primeira Implementação Funcional
 
