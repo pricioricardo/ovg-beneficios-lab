@@ -1,11 +1,12 @@
 # Project state
 
-- **Current stage:** GATE 0 — CONSOLIDADO. This is not approval of the runtime gate.
-- **Last completed:** Initial portable agent harness and Docker structure for Laravel + MySQL created. The default welcome screen and queue jobs migration were removed. No domain functionality was implemented.
-- **In progress:** Preserving the first execution as a single reviewed commit on the existing `work` branch.
-- **Verified:** Docker Compose configuration parses; PHP and shell syntax checks pass; MySQL 8.4 responded successfully to `SELECT 1` in the first execution. In this consolidation session, a short HTTPS request to `https://api.github.com` returned HTTP 200.
-- **Not certified:** The Laravel application runtime has not been certified operational. Composer dependency installation did not complete in the first execution, and the Laravel test suite was not run. Composer installation was not retried during this consolidation.
-- **Configuration:** A cloud configuration draft for `api.github.com` and setup/start instructions was saved in the previous execution; publication is unconfirmed. Any cloud configuration publication is for new tasks only and is not presumed active in this session. The HTTP 200 probe does not validate Composer archive downloads.
-- **Provisional versions:** Laravel 12 and Filament 4 are present in the current scaffold; PHP 8.3 and MySQL 8.4 are declared by Docker. Review these provisional choices before certifying the runtime.
-- **Known blockers:** Composer dependencies remain incomplete. The first execution hit HTTP 403/timeouts downloading package archives from `api.github.com`. No beneficiaries, benefits, requirements, evaluations, eligibility rules, or business screens exist.
-- **Next step:** In a later task, review the provisional runtime choices and complete dependency installation and application verification before considering a runtime gate.
+- **Current gate:** GATE 1 — PASS. Runtime certification passed; Gate 2 has not started.
+- **Branch:** `chore/gate-001-runtime-certification`, based on `origin/work` at Gate 0 commit `a447700302dab51652db3853dae86792cb316f44`.
+- **Certified baseline:** PHP 8.4.26, Laravel 13.34.0, Filament 5.9.0, Livewire 4.4.7, MySQL 8.4.11, Composer 2.8.12, Docker Compose v2.40.3. Exact PHP package versions are locked in `composer.lock`.
+- **Bootstrap:** `./scripts/bootstrap.sh` passed after a clean PHP image build; locked Composer dependencies installed; both services started; migrations applied; `/up` returned successfully. A later idempotent run reported no migrations pending.
+- **Verify:** `./scripts/verify.sh` passed: Compose config, Composer strict validation, shell syntax, MySQL health and version, framework/package versions, migration status, 2 tests / 3 assertions including a Laravel-to-MySQL query, `/up`, `/admin`, and `git diff --check`.
+- **Runtime details:** Compose runs only the Laravel/Apache app and MySQL 8.4. The empty Filament panel is registered at `/admin`; its generated scaffolding contains no domain resources. MySQL data persists in a named Docker volume.
+- **Domain scope:** No beneficiaries, benefits, eligibility requirements, evaluations, business rules, business dashboards, or real data were added. No sensitive credentials were committed.
+- **Engineering notes:** Tinker 3.0 is required for Illuminate 13. The MySQL healthcheck now uses the `mysqladmin` client included in the official image. The app image matches the workspace UID so Apache can read a restrictive Cloud bind mount without broadening file permissions. An intermediate BuildKit cache exhaustion was resolved by pruning only unused build cache; the final bootstrap and verification passed.
+- **Blockers:** None known. Composer dependency resolution and installation completed over TLS.
+- **Next:** Stop at Gate 1. A future gate may begin only from a separate explicit task; do not infer approval for domain implementation.

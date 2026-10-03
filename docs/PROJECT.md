@@ -14,7 +14,7 @@ OVG Benefícios Lab is a small experiment to assess agent-assisted software deve
 
 ## Current milestone
 
-Bootstrap the engineering harness and a reproducible Laravel + MySQL development base. This milestone does not include beneficiaries, benefit entities, eligibility requirements, evaluations, business rules, or business screens. Future domain work requires an explicit task.
+Certify the engineering runtime with the baseline in [`TECHNOLOGY_BASELINE.md`](TECHNOLOGY_BASELINE.md). This milestone does not include beneficiaries, benefit entities, eligibility requirements, evaluations, business rules, or business screens. Future domain work requires an explicit task.
 
 ## Development entry points
 

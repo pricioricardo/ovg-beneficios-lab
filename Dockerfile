@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git unzip libicu-dev libzip-dev libpng-dev libonig-dev libcurl4-openssl-dev libfreetype6-dev libjpeg62-turbo-dev \
@@ -6,6 +6,10 @@ RUN apt-get update \
     && docker-php-ext-install -j"$(nproc)" bcmath curl gd intl mbstring opcache pdo_mysql zip \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
+
+# Match the host workspace owner so Apache can read bind-mounted project files.
+ARG APP_UID=1000
+RUN usermod --uid "${APP_UID}" www-data
 
 COPY --from=composer:2.8 /usr/bin/composer /usr/local/bin/composer
 COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
