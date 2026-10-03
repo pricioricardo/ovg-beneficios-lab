@@ -2,16 +2,16 @@
 
 ## Initial shape
 
-Start with one Laravel application using Filament as the future admin UI framework and MySQL as its relational database. Docker Compose runs only the PHP/Apache application and MySQL. Keep the pilot small and avoid external services until a concrete requirement justifies them.
+Use one Laravel application with Filament as the admin UI framework and MySQL as its relational database. Docker Compose runs only the PHP/Apache application and MySQL. Keep the pilot small and avoid external services until a concrete requirement justifies them.
 
 ## Decision record
 
-### ADR-001: Laravel application with Filament, backed by MySQL
+### ADR-001: Laravel 13 application with Filament 5 and Livewire 4, backed by MySQL 8.4
 
 - **Status:** Accepted for the experiment.
 - **Context:** The team is evaluating agent-assisted development with a small, reviewable application.
-- **Decision:** Use Laravel and Filament in one application, with MySQL as the database and Docker Compose for local/cloud parity.
-- **Consequences:** Keep business logic in Laravel and UI concerns in Filament. Do not add Redis, queue workers, microservices, or orchestration platforms for this pilot. Keep the eventual interface within 10 screens.
+- **Decision:** The Gate 1 target baseline is PHP 8.4, Laravel 13, Filament 5, Livewire 4, MySQL 8.4 LTS, Composer 2, and Docker Compose. The exact resolved Composer patch versions live in `composer.lock`.
+- **Consequences:** Keep business logic in Laravel and UI concerns in Filament. Do not add Redis, queue workers, microservices, or orchestration platforms for this pilot. Keep the eventual interface within 10 screens. Gate 1 runtime certification results are recorded in `.agent/STATE.md`.
 
 ### ADR-002: Provider-neutral project instructions
 

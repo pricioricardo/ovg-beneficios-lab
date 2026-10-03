@@ -24,6 +24,11 @@ else
     echo "Keeping existing .env."
 fi
 
+# Persist the workspace UID for direct `docker compose up -d` use after bootstrap.
+if ! grep -q '^APP_UID=' .env; then
+    printf '\nAPP_UID=%s\n' "$(id -u)" >> .env
+fi
+
 certificate_bundle=""
 for candidate in "${SSL_CERT_FILE:-}" "${REQUESTS_CA_BUNDLE:-}" /etc/ssl/certs/ca-certificates.crt /etc/ssl/cert.pem; do
     if [[ -n "$candidate" && -f "$candidate" ]]; then
@@ -56,8 +61,12 @@ fi
 echo "Starting Laravel and MySQL..."
 docker compose up -d
 
+echo "Applying Laravel migrations..."
+docker compose exec -T app php artisan migrate --force
+
 echo "Waiting for Laravel health endpoint..."
-app_port="${APP_PORT:-8080}"
+port_mapping="$(docker compose port app 80)"
+app_port="${port_mapping##*:}"
 for attempt in {1..30}; do
     if curl --fail --silent "http://127.0.0.1:${app_port}/up" >/dev/null; then
         echo "Laravel is ready at http://127.0.0.1:${app_port}"
