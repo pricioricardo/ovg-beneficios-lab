@@ -11,7 +11,7 @@ echo "Verificando a configuração do Docker Compose..."
 docker compose config --quiet
 
 echo "Verificando a sintaxe dos scripts shell..."
-bash -n scripts/bootstrap.sh scripts/verify.sh scripts/prepare-test-db.sh
+bash -n scripts/bootstrap.sh scripts/verify.sh scripts/prepare-test-db.sh scripts/reset-test-db.sh
 sh -n scripts/docker-entrypoint.sh
 
 running_services="$(docker compose ps --status running --services)"
@@ -21,6 +21,7 @@ if ! grep -Fxq app <<<"$running_services" || ! grep -Fxq mysql <<<"$running_serv
 fi
 
 docker compose exec -T app composer validate --strict
+docker compose exec -T app php -l scripts/test-db.php
 
 echo "Verificando o health check do MySQL..."
 mysql_container="$(docker compose ps -q mysql)"
@@ -56,9 +57,11 @@ fi
 
 echo "Preparando o banco MySQL isolado para testes..."
 ./scripts/prepare-test-db.sh
+echo "Confirmando a conexão efetiva antes do RefreshDatabase..."
+docker compose exec -T -e APP_ENV=testing -e DB_CONNECTION=mysql -e DB_DATABASE=ovg_beneficios_lab_test app php scripts/test-db.php
 
 echo "Executando a suíte de testes do Laravel..."
-docker compose exec -T app php artisan test
+docker compose exec -T -e APP_ENV=testing -e DB_CONNECTION=mysql -e DB_DATABASE=ovg_beneficios_lab_test -e DB_URL= app php artisan test
 
 echo "Verificando o health check HTTP da aplicação..."
 port_mapping="$(docker compose port app 80)"

@@ -13,13 +13,13 @@ use App\Models\Avaliacao;
 use App\Models\Beneficiario;
 use Database\Seeders\Gate3Seeder;
 use Filament\Facades\Filament;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
+use Tests\Support\SafeRefreshDatabase;
 
 class Gate3FilamentTest extends TestCase
 {
-    use RefreshDatabase;
+    use SafeRefreshDatabase;
 
     protected function setUp(): void
     {

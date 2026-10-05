@@ -57,9 +57,9 @@ Use uma aplicação Laravel com Filament como framework da interface administrat
 
 ### ADR-008: Testes de domínio em MySQL isolado
 
-- **Status:** Implementado no Gate 3, aguardando revisão.
+- **Status:** Corrigido após revisão independente do Gate 3; aguardando nova revisão.
 - **Contexto:** SQLite ocultaria diferenças de FK composta, `CHECK`, JSON e transações usadas pelo slice.
-- **Decisão:** Usar `ovg_beneficios_lab_test` como banco descartável, preparado por `scripts/prepare-test-db.sh`, e forçar MySQL no `phpunit.xml`. `migrate:fresh --seed` é executado somente nesse banco.
-- **Consequências:** A suíte requer MySQL local saudável. Os testes não apagam o banco padrão de desenvolvimento.
+- **Decisão:** Usar `ovg_beneficios_lab_test` como banco descartável, distinto do banco padrão do Compose. Antes de `RefreshDatabase` e de qualquer `migrate:fresh` do fluxo do Gate, a guarda valida `testing`, driver MySQL, ausência de `DB_URL`, configuração resolvida e `SELECT DATABASE()` na conexão efetiva. `phpunit.xml` força as variáveis de teste; `scripts/verify.sh` fixa o ambiente no processo e executa uma pré-verificação. O reset manual usa `scripts/reset-test-db.sh`, que repete a guarda no mesmo processo do comando destrutivo. Cache de configuração incompatível causa recusa.
+- **Consequências:** A suíte requer MySQL saudável e configuração de teste coerente. Execução direta sem as variáveis de teste falha antes de `RefreshDatabase`; o script de reset é o caminho documentado para `migrate:fresh --seed`.
 
 Registre futuras decisões materiais com status, contexto, decisão e consequências. Não reescreva uma migration consolidada para expressar uma mudança posterior de schema; adicione uma nova migration.

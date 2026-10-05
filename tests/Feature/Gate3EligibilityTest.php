@@ -12,18 +12,20 @@ use App\Models\Beneficio;
 use App\Models\Comprovacao;
 use App\Models\RegraElegibilidade;
 use App\Models\Requisito;
+use App\Models\ResultadoAvaliacao;
 use App\Models\VersaoRegra;
 use Carbon\CarbonImmutable;
 use Database\Seeders\Gate3Seeder;
 use DomainException;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 use Tests\TestCase;
+use Tests\Support\SafeRefreshDatabase;
 
 class Gate3EligibilityTest extends TestCase
 {
-    use RefreshDatabase;
+    use SafeRefreshDatabase;
 
     protected function setUp(): void
     {
@@ -319,6 +321,31 @@ class Gate3EligibilityTest extends TestCase
         $this->assertSame(3, Beneficiario::count());
         $this->assertSame(3, Comprovacao::count());
         $this->assertSame(ResultadoAutomatico::ELEGIVEL, $avaliacao->fresh()->resultado_automatico);
+    }
+
+    public function test_technical_failure_after_first_result_preserves_attempt_without_partial_results(): void
+    {
+        $criacoes = 0;
+        ResultadoAvaliacao::creating(function () use (&$criacoes): void {
+            if (++$criacoes === 2) {
+                throw new RuntimeException('Falha técnica sintética na persistência.');
+            }
+        });
+
+        try {
+            $this->avaliar('LAB-000001');
+            $this->fail('A falha injetada deveria interromper a avaliação.');
+        } catch (RuntimeException $exception) {
+            $this->assertSame('Falha técnica sintética na persistência.', $exception->getMessage());
+        }
+
+        $this->assertSame(2, $criacoes);
+        $this->assertSame(1, Avaliacao::count());
+        $avaliacao = Avaliacao::sole();
+        $this->assertSame('FALHA_TECNICA', $avaliacao->estado->value);
+        $this->assertNull($avaliacao->resultado_automatico);
+        $this->assertSame(0, $avaliacao->resultados()->count());
+        $this->assertSame(0, Avaliacao::where('estado', 'CONCLUIDA')->count());
     }
 
     private function avaliar(string $identificador): Avaliacao

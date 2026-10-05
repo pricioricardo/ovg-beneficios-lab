@@ -20,7 +20,7 @@ Checks e FKs cobrem invariantes simples. Validação de árvore, tipos, operador
 
 ## Invariantes e estratégia transacional
 
-Capturar um único `now()` em UTC; derivar a data civil em `America/Sao_Paulo`. Uma transação bloqueia Beneficiário, Benefício, Versão vigente e Comprovações consultadas, resolve fatos e grava Avaliação, snapshot, todos os resultados e conclusão. Exceção reverte tudo, sem Avaliação aparentemente concluída. Cada nó é avaliado, mesmo depois de um resultado decisivo. Versões publicadas, nós dessas versões e Avaliações concluídas são protegidos contra edição pelo fluxo de domínio. A engine aceita somente catálogo de requisitos e combinações tipadas conhecidos no código.
+Capturar um único instante UTC na primeira leitura que estabelece a visão consistente do MySQL; derivar a data civil em `America/Sao_Paulo`. A correção da revisão independente separa a aceitação da tentativa e a persistência dos resultados: a primeira transação lê Beneficiário, Benefício, Versão, Requisitos e Comprovações por leituras consistentes do MySQL em `REPEATABLE READ`, fixa os valores e grava `INICIADA`; a segunda grava resultados e conclui atomicamente. Uma falha na segunda fase reverte resultados parciais e marca a tentativa como `FALHA_TECNICA`, sem resultado automático. Cada nó é avaliado, mesmo depois de um resultado decisivo. Versões publicadas, nós dessas versões e Avaliações concluídas são protegidos contra edição pelo fluxo de domínio. A engine aceita somente catálogo de requisitos e combinações tipadas conhecidos no código.
 
 ## Classes, telas e testes previstos
 

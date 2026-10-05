@@ -30,9 +30,9 @@ O contrato conceitual está documentado em `docs/domain/`: Beneficiário, Benef�
 
 ## GATE 3 — Primeira Implementação Funcional
 
-**Status:** READY FOR REVIEW
+**Status:** READY FOR RE-REVIEW
 
-O primeiro fluxo vertical de Cadeira de Rodas está implementado conforme o contrato congelado no Gate 2: cadastro e comprovação sintéticos, regra v1 publicada, engine declarativa, avaliação transacional, snapshot, resultados por nó e explicação no Filament. `migrate:fresh --seed` e `scripts/verify.sh` passaram; a revisão independente ainda decidirá o PASS. Consulte `docs/implementation/GATE_003.md`.
+O primeiro fluxo vertical de Cadeira de Rodas está implementado conforme o contrato congelado no Gate 2. Os três blockers da revisão independente — segurança do banco de teste, preservação de `FALHA_TECNICA` e visão inicial consistente — foram corrigidos e cobertos por regressões. `scripts/verify.sh` passou com 39 testes e 113 assertions. Uma nova revisão independente decidirá o PASS. Consulte `docs/implementation/GATE_003.md`.
 
 ## Etapas futuras — não autorizadas
 

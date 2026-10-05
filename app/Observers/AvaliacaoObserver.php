@@ -17,8 +17,13 @@ class AvaliacaoObserver
 
     public function updating(Avaliacao $avaliacao): void
     {
-        if ($avaliacao->getRawOriginal('estado') === EstadoAvaliacao::CONCLUIDA->value) {
-            throw new DomainException('Avaliação concluída é imutável.');
+        if (in_array($avaliacao->getRawOriginal('estado'), [EstadoAvaliacao::CONCLUIDA->value, EstadoAvaliacao::FALHA_TECNICA->value], true)) {
+            throw new DomainException('Avaliação finalizada é imutável.');
+        }
+
+        if ($avaliacao->estado === EstadoAvaliacao::FALHA_TECNICA
+            && ($avaliacao->resultado_automatico !== null || $avaliacao->resultados()->exists())) {
+            throw new DomainException('Falha técnica não pode conter resultado válido ou parcial.');
         }
 
         if ($avaliacao->estado === EstadoAvaliacao::CONCLUIDA

@@ -30,8 +30,10 @@ Para parar os serviços: `docker compose down`. Para também remover os dados lo
 
 Este é o ponto único de entrada para validação. Ele confere a configuração do Compose, a sintaxe dos scripts, o manifesto Composer, os containers e o health check do MySQL, as versões do runtime, o estado das migrations, a suíte de testes em um banco MySQL isolado e as rotas `/up` e `/admin`.
 
+Para reconstruir explicitamente **somente** o banco descartável de testes e repetir o cenário sintético, use `./scripts/reset-test-db.sh`. O script confere a conexão efetiva antes de `migrate:fresh --seed` e recusa configuração incompatível.
+
 ## Instruções e escopo
 
 Leia [`AGENTS.md`](AGENTS.md), [`policies/`](policies/), [`docs/PROJECT.md`](docs/PROJECT.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) e [`docs/ROADMAP.md`](docs/ROADMAP.md). `AGENTS.md` é a fonte portátil principal; `CLAUDE.md` é somente um adaptador fino para Claude Code.
 
-O runtime foi certificado no Gate 1. O Gate 1.1 consolidou o harness em pt-BR. O Gate 2 congelou o contrato de domínio. O Gate 3 implementa somente o fluxo de Cadeira de Rodas e aguarda revisão independente; consulte [a descrição do slice](docs/implementation/GATE_003.md).
+O runtime foi certificado no Gate 1. O Gate 1.1 consolidou o harness em pt-BR. O Gate 2 congelou o contrato de domínio. O Gate 3 implementa somente o fluxo de Cadeira de Rodas e está pronto para nova revisão independente; consulte [a descrição do slice](docs/implementation/GATE_003.md).

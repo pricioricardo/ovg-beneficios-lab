@@ -1,6 +1,6 @@
 # Gate 3 — primeiro fluxo vertical
 
-**Situação:** READY FOR REVIEW; `scripts/verify.sh` passou com 31 testes e 92 assertions. A revisão independente ainda não ocorreu.
+**Situação:** READY FOR RE-REVIEW após correção dos três blockers da revisão independente. `scripts/verify.sh` passou com 39 testes e 113 assertions; o PASS depende de nova revisão.
 
 ## Escopo implementado
 
@@ -12,9 +12,19 @@ Cinco migrations aditivas criam `beneficiarios`, `comprovacoes`, `beneficios`, `
 
 ## Classes e avaliação
 
-Os oito Models correspondem às tabelas de domínio. `ResolvedorRequisitos` usa catálogo fechado de três códigos `v1`; `ValidadorRegra` exige raiz única, grupos de dois ou mais filhos, profundidade de até três grupos, até 30 condições e operandos compatíveis. `MotorElegibilidade` avalia todos os nós, sem short circuit, e aplica a precedência contratada de `AND` e `OR`. `ExecutarAvaliacao` captura uma vez o instante UTC com precisão de segundos e executa em transação: bloqueia Beneficiário, Benefício, Versão publicada vigente e Comprovações, resolve fatos, grava Avaliação, snapshot, quatro resultados por nó e conclusão. Exceções revertem a transação.
+Os oito Models correspondem às tabelas de domínio. `ResolvedorRequisitos` usa catálogo fechado de três códigos `v1`; `ValidadorRegra` exige raiz única, grupos de dois ou mais filhos, profundidade de até três grupos, até 30 condições e operandos compatíveis. `MotorElegibilidade` avalia todos os nós, sem short circuit, e aplica a precedência contratada de `AND` e `OR`. `ExecutarAvaliacao` captura uma vez o instante UTC com precisão de segundos. A primeira transação exige MySQL `REPEATABLE READ` e lê Beneficiário, Benefício, Versão, árvore, Requisitos e Comprovações por leituras consistentes, sem misturar `lockForUpdate`. A primeira leitura de tabela captura o instante UTC do MySQL e estabelece a visão consistente simultaneamente; os valores capturados alimentam o motor, mesmo se outra conexão editar o cadastro depois. A transação grava a tentativa `INICIADA`. Uma segunda transação persiste os quatro resultados e a conclusão; falha nessa fase reverte resultados parciais e deixa a tentativa em `FALHA_TECNICA`, com resultado automático nulo. O erro é propagado e um log registra somente id da Avaliação e tipo de exceção.
 
 Observers impedem editar conteúdo publicado, alterar semântica de Requisito e editar ou aumentar resultados de Avaliação concluída. A conclusão exige snapshot e um resultado por nó. O histórico é exibido pelos resultados e snapshot preservados; não consulta o cadastro atual para reconstruir o resultado anterior. O snapshot v1 contém identificador sintético, fatos consultados, estado e datas do relatório, versões semânticas, Versão de Regra, instante e valores resolvidos.
+
+## Correções da revisão independente
+
+`TestDatabaseGuard` recusa ambiente diferente de `testing`, driver diferente de MySQL, `DB_URL` ativa, nome configurado diferente do banco descartável e divergência com `SELECT DATABASE()` da conexão efetiva. `SafeRefreshDatabase` invoca a guarda antes do reset do trait. `scripts/verify.sh` faz uma pré-verificação; `scripts/reset-test-db.sh` é o caminho seguro para `migrate:fresh --seed` manual, com guarda repetida no mesmo processo do reset. O banco padrão do Compose não pode ter o nome do banco descartável. Config cache incompatível causa recusa antes do reset.
+
+As regressões acrescentadas cobrem configuração conflitante, falha injetada na segunda gravação de Resultado e duas conexões MySQL intercaladas entre o início da Avaliação e a leitura do Relatório Profissional. O relatório ausente no início produz `PENDENTE_DOCUMENTACAO`; após a edição confirmada, uma nova Avaliação pode produzir `ELEGIVEL`.
+
+`scripts/reset-test-db.sh` executou `migrate:fresh --seed` no banco descartável; uma segunda execução do seeder passou. Testes adversariais sem reset recusaram `DB_URL` conflitante e cache de configuração do banco normal. A falha sintética preservou uma Avaliação `FALHA_TECNICA` com resultado automático nulo e zero Resultados. `scripts/verify.sh` confirmou Compose, baseline, migrations, MySQL real, suíte, `/up`, `/admin` e `git diff --check`.
+
+Permanece como melhoria futura tornar o seeder recuperável após interrupção no meio da criação do rascunho. Atualizações diretas por Query Builder continuam fora das garantias dos Observers.
 
 ## Interface
 
